@@ -1,0 +1,501 @@
+---
+output_dir: "."
+title: "Altered Expression of Diabetes-Related Genes in Alzheimer's Disease Brains"
+subtitle: " The Hisayama Study"
+authors: "Beatriz Magalhães PG32936 | Cláudio Nóvoa PG----- | João Afonso A71874 | Marta Sampaio PG32927"
+date: "14 de Junho de 2017"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    depth: 3
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE)
+```
+# **1| Introdução**
+
+
+# **2| Dados**
+
+
+```{r lib,echo=FALSE,message=FALSE}
+source("https://bioconductor.org/biocLite.R")
+library(GEOquery)
+library(gtools)
+library(genefilter)
+library(hugene10sttranscriptcluster.db)
+library(limma)
+library(GOstats)
+library(gplots)
+library(caret)
+library(rpart)
+library(e1071)
+library(dendextend)
+``` 
+
+
+## **2.1| Carregamento dos e visualização dos dados**
+
+
+```{r data, message=FALSE, warning=FALSE}
+gds <- getGEO("GDS4758")
+eset <- GDS2eSet(gds)
+eset
+``` 
+
+```{r dados}
+dados = exprs(eset)
+dados[1:10,1:6]
+``` 
+
+
+```{r boxplot}
+c = colors()
+boxplot(log2(dados), col = c[as.integer(eset$disease.state)+71], xlab = '', ylab = "Intensidades (log2)",las = 2)
+legend("topright", legend=c("AD","non-AD"), col = c(3,4), pch=c(19), title="Cond.", cex=0.5)
+```
+
+
+**Figura 1 -** _Boxplot_ dos dados.
+
+
+Analisando o _Boxplot_, é possível verificar que os dados seguem uma distribuição normal, pois as caixas apresentam uma distribuição simétrica. Para além disso, as mesmas apresentam centros de dados e ampitudes semelhantes.
+
+
+
+## **2.2| MetaDados**
+
+
+```{r meta}
+vars = pData(eset)
+names(vars)
+```
+
+
+Os metadados encontram-se organizados em 4 campos, nomeadamente:
+* _sample_ -> indica o código da amostra;
+* _disease.state_ -> indica a condição do indivíduo do qual a amostra foi recolhida;
+* _tissue_ -> indica o tipo de tecido da amostra;
+* _gender_ -> indica o sexo do indivíduo do qual a amostra foi recolhida.
+
+
+```{r disease.state}
+levels(vars$disease.state)
+```
+
+```{r tissue}
+levels(vars$tissue)
+```
+
+```{r gender}
+levels(vars$gender)
+```
+
+
+
+**Tabela 1 -** Frequência absoluta das amostras para as variáveis tecido, sexo e condição.
+```{r table}
+ftable(vars$tissue, vars$gender, vars$disease.state, dnn = c("Tissue", "Gender", "Disease state"))
+```
+
+
+
+# **3| Pré-processamento**
+
+
+## **3.1| Verificação da presença de dados omissos**
+
+
+```{r na}
+sum(is.na(dados))
+```
+Concluí-se que os dados não contêm valores omissos.
+
+
+## **3.2| Filtração dos dos dados
+
+**Retirar dados das sondas que correspondem a genes sem anotação:**
+```{r subset}
+genesymbol = unlist(mget(rownames(eset),hugene10sttranscriptclusterSYMBOL))
+d = as.data.frame(genesymbol)
+anot = na.exclude(d)
+subeset = eset[rownames(anot),]
+dim(subeset)
+```
+
+
+
+Foi criado um subset constituído apenas pelos dados relativos a genes com anotação, utilizado na análise de expressão diferencial.
+
+
+**Filtrar dados pela mediana:**
+```{r filt}
+sd = rowSds(exprs(subeset))
+med = median(sd)
+eset.f = subeset[sd>2*med,]
+dim(eset.f)
+hist(sd,breaks = 50,ylim = c(0,4000),col = "blue",xlab = 'Desvio padrão',ylab = 'Frequência',main = NULL)
+abline(v = med*2, col = "green",lwd = 3,lty = 2)
+``` 
+
+
+Procedeu-se, ainda, à filtração dos dados pela mediana, por forma a reduzir a quantidade de dados em estudo e, assim, tornar o processo computacionalmente mais rápido, necessário para a análise de _Machine Learning_.
+
+
+# **4| Análise de Expressão Diferencial e de Enriquecimento**
+
+## **4.1| Doença de Alzheimer vs Controlo**
+Como já referido, foi utilizado o subset com dados relativos apenas aos genes anotados.
+
+
+### **4.1.1| Hipocampo**
+
+
+
+```{r hipo}
+subsethipo = eset[,eset$tissue=="hippocampus"]
+vAHipo = pData(subsethipo)
+rHipo = relevel(subsethipo$disease.state, "non-Alzheimer's disease")
+
+designAHipo = model.matrix(~rHipo)
+fitAHipo = lmFit(subsethipo, designAHipo)
+fit.bayesAHipo = eBayes(fitAHipo) 
+diffAHipo = topTable(fit.bayesAHipo, coef = 2, 1000, genelist = fitAHipo$genes$NAME)
+diffAHipo.anot = diffAHipo[rownames(anot),] #genes anotados
+treshold = foldchange2logratio(1.563)
+genesAHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & (diffAHipo.anot$logFC > treshold | diffAHipo.anot$logFC < -treshold)),]
+dim(genesAHipo)
+```
+
+
+
+#### Genes sobreexpressos:
+
+
+```{r hipoUp}
+upHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & diffAHipo.anot$logFC > treshold),]
+upHipo
+set.up = subsethipo[rownames(upHipo)]
+nomes_upHipo = unlist(mget(rownames(set.up),hugene10sttranscriptclusterSYMBOL))
+```
+
+```{r message=FALSE}
+Vd1_upHipo = nomes_upHipo[subsethipo$disease.state == "Alzheimer's disease"]
+Vd2_upHipo = nomes_upHipo[subsethipo$disease.state != "Alzheimer's disease"]
+md_upHipo <- matrix(c(Vd1_upHipo,Vd2_upHipo),ncol=2,byrow=FALSE)
+colnames(md_upHipo)<- c("AD","non-AD")
+md2_upHipo <- as.table(md_upHipo)
+md2_upHipo
+```
+
+
+#### Genes subexpressos:
+
+
+```{r hipoDown}
+downHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & diffAHipo.anot$logFC < -treshold),]
+set.down = subsethipo[rownames(downHipo)]
+nomes_downHipo = unlist(mget(rownames(set.down),hugene10sttranscriptclusterSYMBOL))
+```
+
+```{r, message=FALSE}
+Vd1_downHipo = nomes_downHipo[subsethipo$disease.state == "Alzheimer's disease"]
+Vd2_downHipo = nomes_downHipo[subsethipo$disease.state != "Alzheimer's disease"]
+md_downHipo <- matrix(c(Vd1_downHipo,Vd2_downHipo),ncol=2,byrow=FALSE)
+colnames(md_downHipo)<- c("AD","non-AD")
+md2_downHipo <- as.table(md_downHipo)
+md2_downHipo
+```
+
+
+### Análise de Enriquecimento para os genes sobrexpressos
+```{r message=FALSE, warning=FALSE}
+entrezUniverse = unlist(mget(featureNames(eset), hugene10sttranscriptclusterENTREZID))
+selectedEntrezIds.up = unlist(mget(rownames(upHipo), hugene10sttranscriptclusterENTREZID))
+params1 = new("GOHyperGParams", geneIds = selectedEntrezIds.up, universeGeneIds = entrezUniverse, 
+              annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
+hgOverHipo = hyperGTest(params1)
+summary(hgOverHipo)
+```
+
+### Análise de Enriquecimento para os genes subexpressos
+```{r message=FALSE, warning=FALSE}
+selectedEntrezIds.down = unlist(mget(rownames(downHipo[1:10,]), hugene10sttranscriptclusterENTREZID))
+params1 = new("GOHyperGParams", geneIds = selectedEntrezIds.down, universeGeneIds = entrezUniverse, 
+              annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
+hgOver1 = hyperGTest(params1)
+summary(hgOver1)
+```
+
+## Doença de Alzheimer vs não-Doença de Alzheimer no Córtex Temporal
+
+```{r}
+subsetTemp = eset[,eset$tissue=="temporal cortex"]
+vATemp = pData(subsetTemp)
+rTemp = relevel(subsetTemp$disease.state, "non-Alzheimer's disease")
+designATemp = model.matrix(~rTemp)
+fitATemp = lmFit(subsetTemp, designATemp)
+fit.bayesATemp = eBayes(fitATemp) 
+diffATemp = topTable(fit.bayesATemp, coef = 2, 1000, genelist = fitATemp$genes$NAME)
+diffATemp.anot = diffATemp[rownames(anot),]
+genesATemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & (diffATemp.anot$logFC > treshold | diffATemp.anot$logFC < -treshold)),]
+dim(genesATemp)
+```
+
+### Genes sobreexpressos:
+```{r}
+upTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$logFC > treshold),]
+upTemp
+settemp.up = subsetTemp[rownames(upTemp)]
+nomes_upTemp = unlist(mget(rownames(settemp.up),hugene10sttranscriptclusterSYMBOL))
+```
+
+```{r}
+Vd1_upTemp = nomes_upTemp[subsetTemp$disease.state == "Alzheimer's disease"]
+Vd2_upTemp = nomes_upTemp[subsetTemp$disease.state != "Alzheimer's disease"]
+md_upTemp <- matrix(c(Vd1_upTemp,Vd2_upTemp),ncol=2,byrow=FALSE)
+colnames(md_upTemp)<- c("AD","non-AD")
+md2_upTemp <- as.table(md_upTemp)
+md2_upTemp
+```
+
+### Genes subexpressos:
+
+```{r}
+downTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$logFC < -treshold),]
+settemp.down = subsetTemp[rownames(downTemp)]
+nomes_downTemp = unlist(mget(rownames(settemp.down),hugene10sttranscriptclusterSYMBOL))
+```
+
+```{r}
+Vd1_downTemp = nomes_downTemp[subsetTemp$disease.state == "Alzheimer's disease"]
+Vd2_downTemp = nomes_downTemp[subsetTemp$disease.state != "Alzheimer's disease"]
+md_downTemp <- matrix(c(Vd1_downTemp,Vd2_downTemp),ncol=2,byrow=FALSE)
+colnames(md_downTemp)<- c("AD","non-AD")
+md2_downTemp <- as.table(md_downTemp)
+md2_downTemp
+```
+
+### Análise de Enriquecimento para os genes sobrexpressos
+### Análise de Enriquecimento para os genes subexpressos
+## Doença de Alzheimer vs não-Doença de Alzheimer no Córtex Frontal
+```{r}
+subsetFront = eset[,eset$tissue=="frontal cortex"]
+vAFront = pData(subsetFront)
+rFront = relevel(subsetFront$disease.state, "non-Alzheimer's disease")
+designAFront = model.matrix(~rFront)
+fitAFront = lmFit(subsetFront, designAFront)
+fit.bayesAFront = eBayes(fitAFront) 
+diffAFront = topTable(fit.bayesAFront, coef = 2, 1000, genelist = fitAFront$genes$NAME)
+diffAFront.anot = diffAFront[rownames(anot),]
+genesAFront = diffAFront.anot[which(diffAFront.anot$adj.P.Val < 0.05 & (diffAFront.anot$logFC > treshold | diffAFront.anot$logFC < -treshold)),]
+dim(genesAFront)
+```
+
+## Masculino vs Feminino nos casos de Doença de Alzheimer
+```{r}
+subAD = eset[eset$disease.state=="Alzheimer's disease",]
+rAD = relevel(subAD$gender, "male")
+designAD = model.matrix(~rAD)
+fit.AD = lmFit(subAD, designAD)
+fit.bayesAD = eBayes(fit.AD) 
+diffAD = topTable(fit.bayesAD, coef = 2, 1000, genelist = fit.AD$genes$NAME)
+diffAD.anot = diffAD[rownames(anot),]
+```
+
+### Genes sobreexpressos:
+```{r}
+upAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC > treshold),]
+setAD.up = subAD[rownames(upAD),]
+namesAD.up = unlist(mget(rownames(setAD.up),hugene10sttranscriptclusterSYMBOL))
+namesAD.up
+```
+FALTA A TABELA
+### Genes subexpressos:
+```{r}
+downAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC < -treshold),]
+setAD.down = subAD[rownames(downAD),]
+namesAD.down = unlist(mget(rownames(setAD.down),hugene10sttranscriptclusterSYMBOL))
+namesAD.down
+```
+FALTA A TABELA
+### Análise de Enriquecimento para os genes sobrexpressos
+### Análise de Enriquecimento para os genes subexpressos
+# Clustering
+## Hipocampo
+```{r shipo}
+ssHipo = subsethipo[rownames(genesAHipo),]
+dados.Hipo = exprs(ssHipo)
+```
+
+```{r chipo,message=FALSE}
+cHipo=cor(dados.Hipo, method = "pearson")
+dHipo = as.dist(1-cHipo)
+hc.Hipo = hclust(dHipo)
+dend.Hipo <- as.dendrogram(hc.Hipo)
+colors_to_use <- (as.numeric(subsethipo$disease.state)+2)
+colors_to_use <- colors_to_use[order.dendrogram(dend.Hipo)]
+labels_colors(dend.Hipo) <- colors_to_use
+plot(dend.Hipo, main = "Clustering Hierárquico non-AD vs AD (hipocampo)")
+legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
+```  
+
+## Córtex Temporal
+```{r sTEMP}
+ssTemp = subsetTemp[rownames(genesATemp),]
+dados.Temp = exprs(ssTemp)
+```
+
+```{r message=FALSE}
+cTemp=cor(dados.Temp, method = "pearson")
+dTemp = as.dist(1-cTemp)
+hc.Temp = hclust(dTemp)
+dend.Temp <- as.dendrogram(hc.Temp)
+colors_to_use <- (as.numeric(subsetTemp$disease.state)+2)
+colors_to_use <- colors_to_use[order.dendrogram(dend.Temp)]
+labels_colors(dend.Temp) <- colors_to_use
+plot(dend.Temp, main = "Clustering Hierárquico non-AD vs AD (Cortex Temporal)")
+legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
+```
+
+
+
+## Género 
+
+# Heatmap
+
+
+# **| Análise preditiva**
+
+
+Para realizar a análise preditiva do conjunto de dados, optou-se por usar o package Caret, que permite simplificar o processo de criação de modelos preditivos, ao facilitar várias tarefas como a estimação de parâmetros. Foi então realizada a previsão do estado de doença (Alzheimer, não-Alzheimer), do tipo de tecido (Hipocampo, Córtex Temporal, Córtex Frontal) e do género (Feminino, Masculino). Os métodos de aprendizagem usados nesta análise incluiram K-vizinhos mais próximos, árvores de decisão e máquinas de vetor de suporte (SVMs), sendo que foi escolhido o método de validação cruzada com 10 folds na seleção de modelos. Para esta análise, foi usado o conjunto de dados filtrado, eset.f. 
+
+## .1|Para o estado de doença
+### .1.1| Análise dos K vizinhos mais próximos
+
+
+```{r knn1,message=FALSE}
+model_knn = train(t(exprs(eset.f)), eset.f$disease.state, method = "knn", trControl=trainControl("cv", number = 5))
+pred_knn = predict(model_knn, t(exprs(eset.f)))
+mk1=confusionMatrix(pred_knn, eset.f$disease.state)
+mk1$table; mk1$overal[1]
+```
+
+
+Como se pode verificar, este modelo preveu o estado de doença com uma _Accuracy_ de, aproximadamente, 72.2%, que representa a percentagem de exemplos corretamente classificados pelo modelo. 
+
+
+### .1.2| Árvores de Decisão
+
+
+```{r tree1,message=FALSE}
+model_tree = train(t(exprs(eset.f)), eset.f$disease.state, method = "rpart", trControl=trainControl("cv", number = 5))
+pred_tree = predict(model_tree, t(exprs(eset.f)))
+mt1 = confusionMatrix(pred_tree, eset.f$disease.state)
+mt1$table; mt1$overal[1]
+```
+
+
+Este modelo preveu o estado de doença com uma _Accuracy_ de, aproximadamente, 87.3%.
+
+
+### .1.3| Máquinas de Vetores de Suportes (SVM's)
+
+
+```{r svm1,message=FALSE}
+model_svm = train(t(exprs(eset.f)), eset.f$disease.state, method = "svmLinear", trControl=trainControl("cv", number = 5))
+pred_svm = predict(model_svm, t(exprs(eset.f)))
+ms1=confusionMatrix(pred_svm, eset.f$disease.state)
+ms1$table; ms1$overal[1]
+```
+
+
+Este modelo preveu o estado de doença com uma _Accuracy_ de 100%, acertando na classificação de todos os exemplos. 
+
+
+## .2| Para o tipo de tecido
+### .2.1| Análise dos K vizinhos mais próximos
+
+
+```{r knn2,message=FALSE}
+model_knn2 = train(t(exprs(eset.f)), eset.f$tissue, method = "knn", trControl=trainControl("cv", number = 5))
+pred_knn2 = predict(model_knn2, t(exprs(eset.f)))
+mk2=confusionMatrix(pred_knn2, eset.f$tissue)
+mk2$table; mk2$overal[1]
+```
+
+
+Já para o tipo de tecido, este modelo preveu com uma _Accuracy_ de 91.1%, aproximadamente.
+
+### .2.2| Árvores de Decisão
+
+
+```{r tree2,message=FALSE}
+model_tree2 = train(t(exprs(eset.f)), eset.f$tissue, method = "rpart", trControl=trainControl("cv", number = 5))
+pred_tree2 = predict(model_tree2, t(exprs(eset.f)))
+mt2=confusionMatrix(pred_tree2, eset.f$tissue)
+mt2$table; mt2$overal[1]
+```
+
+
+Este modelo preveu o tipo de tecido com uma _Accuracy_ de 100%.
+
+### .2.3| Máquinas de Vetores de Suportes (SVM's)
+
+
+```{r svm2,message=FALSE}
+model_svm2 = train(t(exprs(eset.f)), eset.f$tissue, method = "svmLinear", trControl=trainControl("cv", number = 5))
+pred_svm2 = predict(model_svm2, t(exprs(eset.f)))
+ms2=confusionMatrix(pred_svm2, eset.f$tissue)
+ms2$table; ms2$overal[1]
+```
+
+
+Este modelo também preveu o tipo de tecido com uma _Accuracy_ de 100%. 
+
+
+## .3|Para o género
+### .3.1| Análise dos K vizinhos mais próximos
+
+
+```{r knn3,message=FALSE}
+model_knn3 = train(t(exprs(eset.f)), eset.f$gender, method = "knn", trControl=trainControl("cv", number = 5))
+pred_knn3 = predict(model_knn3, t(exprs(eset.f)))
+mk3 = confusionMatrix(pred_knn3, eset.f$gender)
+mk3$table; mk3$overal[1]
+```
+
+
+Na previsão do género, este modelo obteve uma _Accuracy_ de 97.5%, aproximadamente. 
+
+### .3.2| Árvores de Decisão
+
+
+```{r tree3,message=FALSE}
+model_tree3 = train(t(exprs(eset.f)), eset.f$gender, method = "rpart", trControl=trainControl("cv", number = 5))
+pred_tree3 = predict(model_tree3, t(exprs(eset.f)))
+mt3=confusionMatrix(pred_tree3, eset.f$gender)
+mt3$table; mt3$overal[1]
+```
+
+
+Este modelo preveu o género com uma _Accuracy_ de 100%. 
+
+### .3.3| Máquinas de Vetores de Suportes (SVM's)
+
+
+```{r svm3,message=FALSE}
+model_svm3 = train(t(exprs(eset.f)), eset.f$gender, method = "svmLinear", trControl=trainControl("cv", number = 5))
+pred_svm3 = predict(model_svm3, t(exprs(eset.f)))
+ms3 = confusionMatrix(pred_svm3, eset.f$gender)
+ms3$table; ms3$overal[1]
+```
+
+
+Por fim, este modelo também preveu o género com uma _Accuracy_ de 100%. 
+
+
