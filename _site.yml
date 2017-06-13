@@ -29,10 +29,15 @@ navbar:
   right:
     - icon: fa-question fa-lg
       href: help.html
+  
 output:
   html_document:
-    theme: cosmo
-    highlight: textmate
+    toc: true # table of content true
+    depth: 3  # upto three depths of headings (specified by #, ## and ###)
+    number_sections: true  ## if you want number sections at each table header
+    theme: cosmo  # many options for theme, this one is my favorite.
+    highlight: tango  # specifies the syntax highlighting style
     include:
       after_body: footer.html
     css: styles.css
+    
