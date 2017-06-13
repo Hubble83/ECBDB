@@ -2,33 +2,20 @@ name: "my-website"
 output_dir: "."
 include: ["import.R"]
 exclude: ["*.txt", "*.csv"]
+
+subtite: " The Hisayama Study"
+authors: "Beatriz Magalhães PG32936 | Cláudio Nóvoa PG----- | João Afonso A71874 | Marta Sampaio PG32927"
+date: "14 de Junho de 2017"
 navbar:
-  title: "My Website"
+  title: "Altered Expression of Diabetes-Related Genes in Alzheimer's Disease Brains"
   type: inverse
   left:
-    - text: "Home"
+    - text: "Template"
       icon: fa-home
       href: index.html
-    - text: "About"
+    - text: "Relatorio"
       icon: fa-info
-      href: about.html
-    - text: "More"
-      icon: fa-gear
-      menu:
-        - text: "Heading 1"
-        - text: "Page A"
-          href: page_a.html
-        - text: "Page B"
-          href: page_b.html
-        - text: "---------"
-        - text: "Heading 2"
-        - text: "Page C"
-          href: page_c.html
-        - text: "Page D"
-          href: page_d.html
-  right:
-    - icon: fa-question fa-lg
-      href: help.html
+      href: mark.html
   
 output:
   html_document:
