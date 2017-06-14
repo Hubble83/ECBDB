@@ -53,10 +53,10 @@ dados[1:10,1:6]
 ``` 
 
 
-```{r boxplot}
+```{r boxplot, fig.width=14}
 c = colors()
-boxplot(log2(dados), col = c[as.integer(eset$disease.state)+71], xlab = '', ylab = "Intensidades (log2)",las = 2)
-legend("topright", legend=c("AD","non-AD"), col = c(3,4), pch=c(19), title="Cond.", cex=0.5)
+boxplot(log2(dados), col = c[as.integer(eset$disease.state)+71], whiskcol =c[as.integer(eset$disease.state)+71], xlab = '', ylab = "Intensidades (log2)",las = 2,frame=FALSE)
+legend("topright", legend=c("AD","non-AD"), col = c(72,73), pch=c(19), title="Cond.",cex = 0.8)
 ```
 
 
@@ -183,7 +183,7 @@ set.up = subsethipo[rownames(upHipo)]
 nomes_upHipo = unlist(mget(rownames(set.up),hugene10sttranscriptclusterSYMBOL))
 ```
 
-```{r message=FALSE}
+```{r warning=FALSE,message=FALSE}
 Vd1_upHipo = nomes_upHipo[subsethipo$disease.state == "Alzheimer's disease"]
 Vd2_upHipo = nomes_upHipo[subsethipo$disease.state != "Alzheimer's disease"]
 md_upHipo <- matrix(c(Vd1_upHipo,Vd2_upHipo),ncol=2,byrow=FALSE)
@@ -202,13 +202,33 @@ set.down = subsethipo[rownames(downHipo)]
 nomes_downHipo = unlist(mget(rownames(set.down),hugene10sttranscriptclusterSYMBOL))
 ```
 
-```{r, message=FALSE}
+```{r warning=FALSE,message=FALSE}
 Vd1_downHipo = nomes_downHipo[subsethipo$disease.state == "Alzheimer's disease"]
 Vd2_downHipo = nomes_downHipo[subsethipo$disease.state != "Alzheimer's disease"]
 md_downHipo <- matrix(c(Vd1_downHipo,Vd2_downHipo),ncol=2,byrow=FALSE)
 colnames(md_downHipo)<- c("AD","non-AD")
 md2_downHipo <- as.table(md_downHipo)
 md2_downHipo
+```
+
+####Barplot
+
+```{r, message=FALSE, warning=FALSE}
+ssHipo1 = ssHipo[1:12,]
+AD.Hipo = ssHipo1[,ssHipo$disease.state=="Alzheimer's disease"]
+nAD.Hipo = ssHipo1[,ssHipo$disease.state=="non-Alzheimer's disease"]
+medAD.Hipo=rowMeans(exprs(AD.Hipo))
+mednAD.Hipo = rowMeans(exprs(nAD.Hipo))
+dfHipo = data.frame(AD=medAD.Hipo,nAD=mednAD.Hipo)
+sdevAD.Hipo = apply(exprs(AD.Hipo),1,sd)
+sdevnAD.Hipo = apply(exprs(nAD.Hipo),1,sd)
+sdevHipo=c()
+for (i in 1:length(sdevnAD.Hipo))
+  sdevHipo = c(sdevHipo,sdevAD.Hipo[i],sdevnAD.Hipo[i])
+nomesHipo = unlist(mget(rownames(dfHipo),hugene10sttranscriptclusterSYMBOL))
+bp.Hipo=barplot(t(dfHipo),beside=T,main="Niveis de expressao de 12 genes no hipocampo",names.arg=nomesHipo, xlab = "nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
+legend(0,12.2,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+arrows(bp.Hipo,t(dfHipo)+sdevHipo, bp.Hipo, t(dfHipo), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
 
 
@@ -224,11 +244,11 @@ summary(hgOverHipo)
 
 ### Análise de Enriquecimento para os genes subexpressos
 ```{r message=FALSE, warning=FALSE}
-selectedEntrezIds.down = unlist(mget(rownames(downHipo[1:10,]), hugene10sttranscriptclusterENTREZID))
+selectedEntrezIds.down = unlist(mget(rownames(downHipo), hugene10sttranscriptclusterENTREZID))
 params1 = new("GOHyperGParams", geneIds = selectedEntrezIds.down, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
 hgOver1 = hyperGTest(params1)
-summary(hgOver1)
+summary(hgOver1)[1:10,]
 ```
 
 ## Doença de Alzheimer vs não-Doença de Alzheimer no Córtex Temporal
@@ -243,18 +263,18 @@ fit.bayesATemp = eBayes(fitATemp)
 diffATemp = topTable(fit.bayesATemp, coef = 2, 1000, genelist = fitATemp$genes$NAME)
 diffATemp.anot = diffATemp[rownames(anot),]
 genesATemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & (diffATemp.anot$logFC > treshold | diffATemp.anot$logFC < -treshold)),]
+ssTemp = subsetTemp[rownames(genesATemp),]
 dim(genesATemp)
 ```
 
 ### Genes sobreexpressos:
-```{r}
+```{r, warning=FALSE}
 upTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$logFC > treshold),]
-upTemp
 settemp.up = subsetTemp[rownames(upTemp)]
 nomes_upTemp = unlist(mget(rownames(settemp.up),hugene10sttranscriptclusterSYMBOL))
 ```
 
-```{r}
+```{r, warning=FALSE,message=FALSE}
 Vd1_upTemp = nomes_upTemp[subsetTemp$disease.state == "Alzheimer's disease"]
 Vd2_upTemp = nomes_upTemp[subsetTemp$disease.state != "Alzheimer's disease"]
 md_upTemp <- matrix(c(Vd1_upTemp,Vd2_upTemp),ncol=2,byrow=FALSE)
@@ -271,13 +291,31 @@ settemp.down = subsetTemp[rownames(downTemp)]
 nomes_downTemp = unlist(mget(rownames(settemp.down),hugene10sttranscriptclusterSYMBOL))
 ```
 
-```{r}
+```{r warning=FALSE,message=FALSE}
 Vd1_downTemp = nomes_downTemp[subsetTemp$disease.state == "Alzheimer's disease"]
 Vd2_downTemp = nomes_downTemp[subsetTemp$disease.state != "Alzheimer's disease"]
 md_downTemp <- matrix(c(Vd1_downTemp,Vd2_downTemp),ncol=2,byrow=FALSE)
 colnames(md_downTemp)<- c("AD","non-AD")
 md2_downTemp <- as.table(md_downTemp)
 md2_downTemp
+```
+####Barplot
+
+```{r, message=FALSE, warning=FALSE}
+AD.Temp = ssTemp[,ssTemp$disease.state=="Alzheimer's disease"]
+nAD.Temp = ssTemp[,ssTemp$disease.state=="non-Alzheimer's disease"]
+medAD.Temp=rowMeans(exprs(AD.Temp))
+mednAD.Temp = rowMeans(exprs(nAD.Temp))
+dfTemp = data.frame(AD=medAD.Temp,nAD=mednAD.Temp)
+sdevAD.Temp = apply(exprs(AD.Temp),1,sd)
+sdevnAD.Temp = apply(exprs(nAD.Temp),1,sd)
+sdevTemp=c()
+for (i in 1:length(sdevnAD.Temp))
+  sdevTemp = c(sdevTemp,sdevAD.Temp[i],sdevnAD.Temp[i])
+nomesTemp = unlist(mget(rownames(dfTemp),hugene10sttranscriptclusterSYMBOL))
+bp.Temp=barplot(t(dfTemp),beside=T,main="Niveis de expressao de 12 genes no Tempcampo",names.arg=nomesTemp, xlab = "nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
+legend(0,12.2,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+arrows(bp.Temp,t(dfTemp)+sdevTemp, bp.Temp, t(dfTemp), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
 
 ### Análise de Enriquecimento para os genes sobrexpressos
@@ -316,7 +354,7 @@ namesAD.up
 ```
 FALTA A TABELA
 ### Genes subexpressos:
-```{r}
+```{r }
 downAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC < -treshold),]
 setAD.down = subAD[rownames(downAD),]
 namesAD.down = unlist(mget(rownames(setAD.down),hugene10sttranscriptclusterSYMBOL))
@@ -344,13 +382,13 @@ plot(dend.Hipo, main = "Clustering Hierárquico non-AD vs AD (hipocampo)")
 legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ```  
 
+
 ## Córtex Temporal
 ```{r sTEMP}
-ssTemp = subsetTemp[rownames(genesATemp),]
 dados.Temp = exprs(ssTemp)
 ```
 
-```{r message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 cTemp=cor(dados.Temp, method = "pearson")
 dTemp = as.dist(1-cTemp)
 hc.Temp = hclust(dTemp)
@@ -367,7 +405,32 @@ legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ## Género 
 
 # Heatmap
+```{r}
+dist.fun = function(x) {
+  return (as.dist (1 - cor(t (x), method = "pearson")))
+}
 
+clust.fun = function (x) {
+  return (hclust (x))
+}
+color.map.tissue <- function(disease) { if (disease == "Alzheimer's disease") "turquoise" else "chocolate1" }
+```
+#### HIPOCAMPO
+```{r}
+tissuecolorsh <- unlist(lapply(ssHipo$disease.state, color.map.tissue))
+heatmap(exprs(ssHipo),ColSideColors = tissuecolorsh, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
+        ylab = "Sondas", xlab = "Amostras", main = "Heatmap (Hipocampo)")
+legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
+```
+
+#### TEMPORAL
+```{r}
+tissuecolorst <- unlist(lapply(ssTemp$disease.state, color.map.tissue))
+heatmap(exprs(ssTemp),ColSideColors = tissuecolorst, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
+        ylab = "Sondas", xlab = "Amostras", main = "Heatmap (Cortex Temporal)")
+
+legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
+```
 
 # **| Análise preditiva**
 
@@ -386,7 +449,7 @@ mk1$table; mk1$overal[1]
 ```
 
 
-Como se pode verificar, este modelo preveu o estado de doença com uma _Accuracy_ de, aproximadamente, 72.2%, que representa a percentagem de exemplos corretamente classificados pelo modelo. 
+Como se pode verificar, este modelo previu o estado de doença com uma _Accuracy_ de, aproximadamente, 72.2%, que representa a percentagem de exemplos corretamente classificados pelo modelo. 
 
 
 ### .1.2| Árvores de Decisão
@@ -400,7 +463,7 @@ mt1$table; mt1$overal[1]
 ```
 
 
-Este modelo preveu o estado de doença com uma _Accuracy_ de, aproximadamente, 87.3%.
+Este modelo previu o estado de doença com uma _Accuracy_ de, aproximadamente, 87.3%.
 
 
 ### .1.3| Máquinas de Vetores de Suportes (SVM's)
@@ -414,7 +477,7 @@ ms1$table; ms1$overal[1]
 ```
 
 
-Este modelo preveu o estado de doença com uma _Accuracy_ de 100%, acertando na classificação de todos os exemplos. 
+Este modelo previu o estado de doença com uma _Accuracy_ de 100%, acertando na classificação de todos os exemplos. 
 
 
 ## .2| Para o tipo de tecido
@@ -429,7 +492,7 @@ mk2$table; mk2$overal[1]
 ```
 
 
-Já para o tipo de tecido, este modelo preveu com uma _Accuracy_ de 91.1%, aproximadamente.
+Já para o tipo de tecido, este modelo previu com uma _Accuracy_ de 91.1%, aproximadamente.
 
 ### .2.2| Árvores de Decisão
 
@@ -442,7 +505,7 @@ mt2$table; mt2$overal[1]
 ```
 
 
-Este modelo preveu o tipo de tecido com uma _Accuracy_ de 100%.
+Este modelo previu o tipo de tecido com uma _Accuracy_ de 100%.
 
 ### .2.3| Máquinas de Vetores de Suportes (SVM's)
 
@@ -455,7 +518,7 @@ ms2$table; ms2$overal[1]
 ```
 
 
-Este modelo também preveu o tipo de tecido com uma _Accuracy_ de 100%. 
+Este modelo também previu o tipo de tecido com uma _Accuracy_ de 100%. 
 
 
 ## .3|Para o género
@@ -483,7 +546,7 @@ mt3$table; mt3$overal[1]
 ```
 
 
-Este modelo preveu o género com uma _Accuracy_ de 100%. 
+Este modelo previu o género com uma _Accuracy_ de 100%. 
 
 ### .3.3| Máquinas de Vetores de Suportes (SVM's)
 
@@ -496,6 +559,6 @@ ms3$table; ms3$overal[1]
 ```
 
 
-Por fim, este modelo também preveu o género com uma _Accuracy_ de 100%. 
+Por fim, este modelo também previu o género com uma _Accuracy_ de 100%. 
 
 
