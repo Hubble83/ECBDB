@@ -449,7 +449,7 @@ summary(hgOverg1)[1:10,]
 
 
 
-Os genes sobreepressos no córtex frontal desempenham funções como regulação negativa da resposta inflamatória crónica, sinalização de recetores acoplados à roteína G, regulação da potenciação sináptica a longo-prazo, entre outras. A relação entre todas estas funções e a doença de Alzheimer já foi previamente explicada.
+Os genes sobreepressos no sexo feminino desempenham funções como regulação negativa da resposta inflamatória crónica, sinalização de recetores acoplados à roteína G, regulação da potenciação sináptica a longo-prazo, entre outras. A relação entre todas estas funções e a doença de Alzheimer já foi previamente explicada.
 
 
 ### **Análise de Enriquecimento para os genes subexpressos**
@@ -463,7 +463,7 @@ summary(hgOverg2)[1:10,]
 ```
 
 
-Os genes subexpressos no córtex frontal estão envolvidos na demetilação de histonas, o que provoca a quebra dos nucleossomas de DNA, que, em condições atípicas provoca uma desregulação da transcrição [4]. Relacionando com AD, isto pode levar a um mal-funcionamento dos neurónios e da comunicação entre estes, podendo eventualmente, ser uma das causas da sua destruição. 
+Os genes subexpressos no sexo feminino estão envolvidos na demetilação de histonas, o que provoca a quebra dos nucleossomas de DNA, que, em condições atípicas provoca uma desregulação da transcrição [4]. Relacionando com AD, isto pode levar a um mal-funcionamento dos neurónios e da comunicação entre estes, podendo eventualmente, ser uma das causas da sua destruição. 
 
 
 # **Clustering**
