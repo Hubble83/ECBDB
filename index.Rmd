@@ -563,7 +563,7 @@ legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocola
 
 **Figura 8 -** _Heatmap_ dos dados de expressão do córtex temporal.
 
-Analisando o _heatmap_, verifica-se que as amostras não são totalmente separadas, tal como no _cluster_ anterior.
+Analisando o heatmap, verifica-se que as amostras não são totalmente separadas, tal como no cluster anterior, e que apesar de haver alguma diferença de intensidade de intensidade de côr entre as caixas correspodentes a AD e non-AD, a separação não é tão distinta como no caso do hipocampo.
 
 # **Análise preditiva**
 
