@@ -449,7 +449,7 @@ summary(hgOverg1)[1:10,]
 
 
 
-Os genes sobreepressos no sexo feminino desempenham funções como regulação negativa da resposta inflamatória crónica, sinalização de recetores acoplados à roteína G, regulação da potenciação sináptica a longo-prazo, entre outras. A relação entre todas estas funções e a doença de Alzheimer já foi previamente explicada.
+Os genes sobreepressos no sexo feminino desempenham funções como regulação negativa da resposta inflamatória crónica, sinalização de recetores acoplados à proteína G, regulação da potenciação sináptica a longo-prazo, entre outras. A relação entre todas estas funções e a doença de Alzheimer já foi previamente explicada.
 
 
 ### **Análise de Enriquecimento para os genes subexpressos**
