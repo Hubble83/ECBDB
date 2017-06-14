@@ -169,7 +169,7 @@ abline(v = med*2, col = "green",lwd = 3,lty = 2)
 
 **Figura 2 -** Histograma dos dados correspondentes a genes com anotação.
 
-A filtração pela mediana corresponde à seleção dos dados cujo cujo desvio padrão se situa à direita da linha média do histograma.
+A filtração pela mediana corresponde à seleção dos dados cujo cujo desvio padrão se situa à direita da linha mediana do histograma.
 
 # **Análise de Expressão Diferencial e de Enriquecimento**
 
@@ -692,15 +692,13 @@ ms3$table; ms3$overal[1]
 ```
 
 
-Por fim, este modelo também previu o género com uma _Accuracy_ de 100%. 
+Por fim, este modelo também previu o género com uma _Accuracy_ de 100%. Deste modo, é possível verificar que todos os métodos utilizados apresentam bons resultados, sendo que a melhor previsão foi do modelo de SVM's, que obteve 100% de _Accuracy_ nos três tipos de análise, ou seja, acertou na classificação de estado de doença, de tecido e de género de todas as amostras.
 
 # Conclusão
 
 A doença de Alzheimer é considerada uma das doenças do mundo moderno, tendo a sua incidência e prevalência vindo  a aumentar devido ao envelhecimento da população. Contudo, apesar dos vários estudos nesta área que tentam perceber a sua patofisiologia e numa última instância encontrar uma cura, a causa desta doença continua um mistério. Desta forma,  a análise de expressão diferencial dos tecidos mais afetados por esta doença é fundamental. Pela análise feita, foi possível inferir algumas alterações relacionadas com a sintomatologia da doença e relacioná-las com aquilo que já se sabe sobre o processo de degeneração neuronal.
 
 Consideramos que cumprimos os objetivos propostos e que este trabalho nos enriqueceu em termos de conhecimento sobre as ferramentas do Rstudio, rmarkdown e doença de Alzheimer.
-
-Por fim, este modelo também previu o género com uma _Accuracy_ de 100%. Deste modo, é possível verificar que todos os métodos utilizados apresentam bons resultados, sendo que a melhor previsão foi do modelo de SVM's, que obteve 100% de _Accuracy_ nos três tipos de análise, ou seja, acertou na classificação de estado de doença, de tecido e de géner de todas as amostras.
 
 
 #Bibliografia
