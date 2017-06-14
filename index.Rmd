@@ -175,7 +175,7 @@ A filtração pela mediana corresponde à seleção dos dados cujo desvio padrão se s
 
 Foram realizadas análises de expressão diferencial entre Doença de Alzheimer e controlo (não-Doença de Alzheimer) para os dados referentes a cada tecido (Hipocampo, Córtex Temporal e Córtex Frontal), de forma a detetar qual o mais afetado pela doença e, adicionalmente, foi realizada uma análise de expressão diferencial entre sexo Masculino e sexo Feminino para os dados da Doença de Alzheimer, para confirmar a maior predisposição desta doença no sexo Feminino.
 Estas análises foram realizadas utilizando o package limma, que usa modelos lineares para avaliar a expressão diferencial de experiências multifatoriais, sendo o método ideal para este tipo de análise.  
-Na análise de expressão diferencial usou-se o Expression Set completo, contudo na identificação de genes siginificativamente sobrexpressos e subexpressos analisaram-se apenas os genes anotados, com _p-value_ < 0.05 e _Fold Change_ > _treshold_, para estar de acordo com a análise realizada no artigo. 
+Na análise de expressão diferencial usou-se o Expression Set completo, contudo na identificação de genes siginificativamente sobreexpressos e subexpressos analisaram-se apenas os genes anotados, com _p-value_ < 0.05 e _Fold Change_ > _treshold_, para estar de acordo com a análise realizada no artigo. 
 De seguida, foi realizada a análise de enriquecimento onde os genes identificados na análise anterior são comparados com outros conjuntos de genes, onde cada um destes contém genes com funções biológicas semelhantes, com objetivo de verificar se nos genes identificados existe enriquecimento estatisticamente significativo de algum/vários conjuntos. Nesta análise foi usado o package GOstats que permite a análise funcional dos genes de interesse, associando-os a termos de _Gene Ontology_ (GO). 
 
 ## **Doença de Alzheimer vs Controlo**
@@ -210,7 +210,7 @@ set.up = subsethipo[rownames(upHipo)]
 nomes_upHipo = unlist(mget(rownames(set.up),hugene10sttranscriptclusterSYMBOL))
 nomes_upHipo
 ```
-No hipocampo, 3 dos 83 genes estão sobrexpressos na Doença de Alzheimer. 
+No hipocampo, 3 dos 83 genes estão sobreexpressos na Doença de Alzheimer. 
 
 
 #### **Genes subexpressos:**
@@ -250,7 +250,7 @@ arrows(bp.Hipo,t(dfHipo)+sdevHipo, bp.Hipo, t(dfHipo), angle=90, code=1,length =
 **Figura 3 -** Comparação dos níveis de expressão de 12 genes cuja expressão diferencial é significativamente diferente no hipocampo AD em relação a non-AD.
 
 
-#### **Análise de Enriquecimento para os genes sobrexpressos**
+#### **Análise de Enriquecimento para os genes sobreexpressos**
 ```{r message=FALSE, warning=FALSE}
 entrezUniverse = unlist(mget(featureNames(eset), hugene10sttranscriptclusterENTREZID))
 selectedEntrezIds.up.h = unlist(mget(rownames(upHipo), hugene10sttranscriptclusterENTREZID))
@@ -261,7 +261,7 @@ summary(hgOverHipo)
 ```
 
 
-Pela análise de enriquecimento pode-se aferir que os genes sobrexpressos no hipocampo estão envolvidos em processos como a regulação positiva da atividade da ubiquitina transferase, da ubiquitinização de proteínas e modificação proteica por conjugação ou remoção de pequenas proteínas. Estas funções estão relacionadas entre si e relacionam-se com AD, visto que, a ubiquitina transferase catalisa a transferência da ubiquitina de uma proteína para outra, sendo que a ubiquitina está envolvida em inúmeros processos celulares, incluíndo memória a longo prazo e doença de Alzheimer [4].
+Pela análise de enriquecimento pode-se aferir que os genes sobreexpressos no hipocampo estão envolvidos em processos como a regulação positiva da atividade da ubiquitina transferase, da ubiquitinização de proteínas e modificação proteica por conjugação ou remoção de pequenas proteínas. Estas funções estão relacionadas entre si e relacionam-se com AD, visto que, a ubiquitina transferase catalisa a transferência da ubiquitina de uma proteína para outra, sendo que a ubiquitina está envolvida em inúmeros processos celulares, incluíndo memória a longo prazo e doença de Alzheimer [4].
 
 
 #### **Análise de Enriquecimento para os genes subexpressos**
@@ -302,7 +302,7 @@ settemp.up = subsetTemp[rownames(upTemp)]
 nomes_upTemp = unlist(mget(rownames(settemp.up),hugene10sttranscriptclusterSYMBOL))
 nomes_upTemp
 ```
-No Córtex Temporal, 5 dos 8 genes estão sobrexpressos na Doença de Alzheimer. 
+No Córtex Temporal, 5 dos 8 genes estão sobreexpressos na Doença de Alzheimer. 
 
 #### **Genes subexpressos:**
 
@@ -337,7 +337,7 @@ arrows(bp.Temp,t(dfTemp)+sdevTemp, bp.Temp, t(dfTemp), angle=90, code=1,length =
 **Figura 4 -** Comparação dos níveis de expressão de 8 genes cuja expressão diferencial é significativamente diferente no córtex temporal AD em relação a non-AD.
 
 
-#### **Análise de Enriquecimento para os genes sobrexpressos**
+#### **Análise de Enriquecimento para os genes sobreexpressos**
 
 ```{r message=FALSE, warning=FALSE}
 selectedEntrezIds.up.t = unlist(mget(rownames(upTemp), hugene10sttranscriptclusterENTREZID))
@@ -402,7 +402,7 @@ setAD.up = subAD[rownames(upAD),]
 namesAD.up = unlist(mget(rownames(setAD.up),hugene10sttranscriptclusterSYMBOL))
 namesAD.up
 ```
-7 dos 9 genes estão sobrexpressos no género feminino. 
+7 dos 9 genes estão sobreexpressos no género feminino. 
 
 
 ### **Genes subexpressos:**
@@ -437,7 +437,7 @@ arrows(bp.g,t(dfg)+sdevg, bp.g, t(dfg), angle=90, code=1,length = 0.15,xpd=TRUE)
 **Figura 5 -** Comparação dos níveis de expressão de 9 genes cuja expressão diferencial é significativamente diferente no sexo feminino em relação ao sexo masculino em AD.
 
 
-### **Análise de Enriquecimento para os genes sobrexpressos**
+### **Análise de Enriquecimento para os genes sobreexpressos**
 
 ```{r message=FALSE, warning=FALSE}
 selectedEntrezIds.up.g = unlist(mget(rownames(upAD), hugene10sttranscriptclusterENTREZID))
