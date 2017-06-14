@@ -2,30 +2,32 @@
 output_dir: "."
 title: "Altered Expression of Diabetes-Related Genes in Alzheimer's Disease Brains"
 subtitle: " The Hisayama Study"
-authors: "Beatriz Magalhães PG32936 | Cláudio Nóvoa PG----- | João Afonso A71874 | Marta Sampaio PG32927"
+authors: "Beatriz Magalhães PG32936 | Cláudio Nóvoa PG32942 | João Afonso A71874 | Marta Sampaio PG32927"
 date: "14 de Junho de 2017"
 output:
   html_document:
     toc: true
     toc_float: true
-    depth: 3
+    depth: 2
     number_sections: true
     theme: cosmo
     highlight: tango
 ---
 <style>
-  h1,h2,h3 {
+  h1,h2,h3,h4,h5 {
     font-weight: bold;
+  }
+  p {
+    text-align: justify;
   }
 </style>
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache=TRUE)
 ```
 # Introdução
-Milhões de pessoas em todo o mundo sofrem de demência, sendo que se prevê a quadruplicação deste número nos próximos 25 anos.(1) (2) Tal facto deve-se ao aumento da esperança média de vida e consequente aumento do número de idosos. A doença de Alzheimer (AD) é uma das formas mais comuns de demência nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cérebro, levando à perda de memória, pensamento e distúrbios comportamentais.(2) (3) A incidência da AD é díspare em relação aos sexos, sendo mais notória no sexo feminino (dois terços nos USA). (3) Atualmente, existe tratamento para a doença, porém apenas retarda a sua evolução. Por não haver ainda uma cura para a AD e porque a prevenção é crucial para a diminuição da taxa de incidência desta doença, é necessário perceber quais os fatores de risco e causas que a provocam. O metabolismo da glucose e a insulina são exemplos desses fatores, onde o organismo em situações de hiperinsulenémia e hiperglicémia, causadas por resistência à insulina, pode acelerar esse processo. Isto deve-se ao aumento da formação de placas neuríticas em conjunto com efeito da APO??4, que se sabe estarem envolvidas na patofisiologia de AD. (1) (2)
+Milhões de pessoas em todo o mundo sofrem de demência, sendo que se prevê a quadruplicação deste número nos próximos 25 anos [1,2]. Tal facto deve-se ao aumento da esperança média de vida e consequente aumento do número de idosos. A doença de Alzheimer (AD) é uma das formas mais comuns de demência nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cérebro, levando à perda de memória, pensamento e distúrbios comportamentais [2,3]. A incidência da AD é díspare em relação aos sexos, sendo mais notória no sexo feminino (dois terços nos USA) [3]. Atualmente, existe tratamento para a doença, porém apenas retarda a sua evolução. Por não haver ainda uma cura para a AD e porque a prevenção é crucial para a diminuição da taxa de incidência desta doença, é necessário perceber quais os fatores de risco e causas que a provocam. O metabolismo da glucose e a insulina são exemplos desses fatores, onde o organismo em situações de hiperinsulenémia e hiperglicémia, causadas por resistência à insulina, pode acelerar esse processo. Isto deve-se ao aumento da formação de placas neuríticas em conjunto com efeito da APOE &epsilon;4, que se sabe estarem envolvidas na patofisiologia de AD [1,2].
 
-O objetivo deste trabalho passou pela análise de um conjunto de dados de expressão génica, com recurso  ao programa Rstudio e aos packages do Bioconductor.
-Neste trabalho, foram analisadas 79 amostras, de diferentes tecidos encefálicos, provenientes de necrópsias de indivíduos residentes em Hisayma diagnosticados com aAlzheimer ou um distúrbio relacionado (controlo). Os tipos de tecido analisados correspondem ao hipocampo, córtex temporal ou córtex frontal. 
+O objetivo deste trabalho passou pela análise de um conjunto de dados de expressão génica, com recurso  ao programa Rstudio e aos packages do Bioconductor. Neste trabalho, foram analisadas 79 amostras, de diferentes tecidos encefálicos, provenientes de necrópsias de indivíduos residentes em Hisayma diagnosticados com aAlzheimer ou um distúrbio relacionado (controlo). Os tipos de tecido analisados correspondem ao hipocampo, córtex temporal ou córtex frontal. Apesar de o artigo analisado analisar e tirar conclusões em relação à diabetes, o dataset não possui iformação relativa a esta condição, por isso o nosso trabalho irá focar-se apenas na doença de Alzheimer.
 
 
 # Dados
@@ -65,7 +67,7 @@ dados[1:10,1:6]
 ```{r boxplot, fig.width=14}
 c = colors()
 boxplot(log2(dados), col = c[as.integer(eset$disease.state)+71], whiskcol =c[as.integer(eset$disease.state)+71], xlab = '', ylab = "Intensidades (log2)",las = 2,frame=FALSE)
-legend("topright", legend=c("AD","non-AD"), col = c(72,73), pch=c(19), title="Cond.",cex = 0.8)
+legend("topright", legend=c("AD","non-AD"), col = c[c(72,73)], pch=c(19), title="Cond.",cex = 0.8)
 ```
 
 
@@ -85,7 +87,7 @@ names(vars)
 ```
 
 
-Os metadados encontram-se organizados em 4 campos, nomeadamente:
+Os metadados encontram-se organizados em 5 campos, nomeadamente:
 
 * _sample_ -> indica o código da amostra;
 
@@ -94,6 +96,8 @@ Os metadados encontram-se organizados em 4 campos, nomeadamente:
 * _tissue_ -> indica o tipo de tecido da amostra;
 
 * _gender_ -> indica o sexo do indivíduo do qual a amostra foi recolhida.
+
+* _description_ -> 
 
 
 ```{r disease.state}
@@ -118,10 +122,10 @@ ftable(vars$tissue, vars$gender, vars$disease.state, dnn = c("Tissue", "Gender",
 
 
 
-# **Pré-processamento**
+# Pré-processamento
 
 
-## **Verificação da presença de dados omissos**
+## Verificação da presença de dados omissos
 
 
 ```{r na}
@@ -130,7 +134,7 @@ sum(is.na(dados))
 Concluí-se que os dados não contêm valores omissos.
 
 
-## **Filtração dos dos dados
+## Filtragem dos dos dados
 
 **Retirar dados das sondas que correspondem a genes sem anotação:**
 ```{r subset}
@@ -152,13 +156,20 @@ sd = rowSds(exprs(subeset))
 med = median(sd)
 eset.f = subeset[sd>2*med,]
 dim(eset.f)
-hist(sd,breaks = 50,ylim = c(0,4000),col = "blue",xlab = 'Desvio padrão',ylab = 'Frequência',main = NULL)
-abline(v = med*2, col = "green",lwd = 3,lty = 2)
 ``` 
 
 
 Procedeu-se, ainda, à filtração dos dados pela mediana, por forma a reduzir a quantidade de dados em estudo e, assim, tornar o processo computacionalmente mais rápido, necessário para a análise de _Machine Learning_.
 
+```{r}
+hist(sd,breaks = 50,ylim = c(0,4000),col = "blue",xlab = 'Desvio padrão',ylab = 'Frequência',main = NULL)
+abline(v = med*2, col = "green",lwd = 3,lty = 2)
+```
+
+
+**Figura 2 -** Histograma dos dados correspondentes a genes com anotação.
+
+A filtração pela mediana corresponde à seleção dos dados cujo cujo desvio padrão se situa à direita da linha média do histograma.
 
 # **Análise de Expressão Diferencial e de Enriquecimento**
 
@@ -176,7 +187,6 @@ Criação do modelo linear, definindo controlo como referência:
 subsethipo = eset[,eset$tissue=="hippocampus"]
 vAHipo = pData(subsethipo)
 rHipo = relevel(subsethipo$disease.state, "non-Alzheimer's disease")
-
 designAHipo = model.matrix(~rHipo)
 fitAHipo = lmFit(subsethipo, designAHipo)
 fit.bayesAHipo = eBayes(fitAHipo) 
@@ -198,7 +208,6 @@ upHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & diffAHipo.anot$l
 upHipo
 set.up = subsethipo[rownames(upHipo)]
 nomes_upHipo = unlist(mget(rownames(set.up),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_upHipo)
 nomes_upHipo
 ```
 No hipocampo, 3 dos 83 genes estão sobrexpressos na Doença de Alzheimer. 
@@ -212,7 +221,6 @@ downHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & diffAHipo.anot
 downHipo[1:3,]
 set.down = subsethipo[rownames(downHipo)]
 nomes_downHipo = unlist(mget(rownames(set.down),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_downHipo)
 nomes_downHipo[1:15]
 ```
 No hipocampo, 80 dos 83 genes estão subexpressos na Doença de Alzheimer. 
@@ -234,13 +242,15 @@ for (i in 1:length(sdevnAD.Hipo))
   sdevHipo = c(sdevHipo,sdevAD.Hipo[i],sdevnAD.Hipo[i])
 nomesHipo = unlist(mget(rownames(dfHipo),hugene10sttranscriptclusterSYMBOL))
 bp.Hipo=barplot(t(dfHipo),beside=T,main="Níveis de expressão de 12 genes no hipocampo",names.arg=nomesHipo, xlab = "Nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
-legend(5,11,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+legend(6,11,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Hipo,t(dfHipo)+sdevHipo, bp.Hipo, t(dfHipo), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
-**Figura 2 -** Comparação dos níveis de expressão de 12 genes cuja expressão diferencial é significativamente diferente no hipocampo AD em relação a non-AD.
 
 
-### Análise de Enriquecimento para os genes sobrexpressos
+**Figura 3 -** Comparação dos níveis de expressão de 12 genes cuja expressão diferencial é significativamente diferente no hipocampo AD em relação a non-AD.
+
+
+#### **Análise de Enriquecimento para os genes sobrexpressos**
 ```{r message=FALSE, warning=FALSE}
 entrezUniverse = unlist(mget(featureNames(eset), hugene10sttranscriptclusterENTREZID))
 selectedEntrezIds.up.h = unlist(mget(rownames(upHipo), hugene10sttranscriptclusterENTREZID))
@@ -250,14 +260,22 @@ hgOverHipo = hyperGTest(params1.up.h)
 summary(hgOverHipo)
 ```
 
-### Análise de Enriquecimento para os genes subexpressos
+
+Pela análise de enriquecimento pode-se aferir que os genes sobrexpressos no hipocampo estão envolvidos em processos como a regulação positiva da atividade da ubiquitina transferase, da ubiquitinização de proteínas e modificação proteica por conjugação ou remoção de pequenas proteínas. Estas funções estão relacionadas entre si e relacionam-se com AD, visto que, a ubiquitina transferase catalisa a transferência da ubiquitina de uma proteína para outra, sendo que a ubiquitina está envolvida em inúmeros processos celulares, incluíndo memória a longo prazo e doença de Alzheimer [4].
+
+
+#### **Análise de Enriquecimento para os genes subexpressos**
 ```{r message=FALSE, warning=FALSE}
 selectedEntrezIds.down.h = unlist(mget(rownames(downHipo), hugene10sttranscriptclusterENTREZID))
 params1.down.h = new("GOHyperGParams", geneIds = selectedEntrezIds.down.h, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
-hgOver1 = hyperGTest(params1.down.h)
-summary(hgOver1)[1:10,]
+hgOverHipo1 = hyperGTest(params1.down.h)
+summary(hgOverHipo1)[1:10,]
 ```
+
+
+Os genes subexpressos no hipocampo são responsáveis por funções como a transmissão sináptica e trans-sináptica, transporte de iões e regulação do transporte. Na doença de Alzheimer, sabe-se que ocorre deposição de proteína amilóide e de emaranhados neurofibrilhares, que levam à interrupção da comunicação entre neurónios (sinapse). Os emaranhados, além disso, levam à destruição de neurónios com o decorrer da doença [4]. Deste modo, apesar de a patofisiologia da doença ainda não ser totalmente conhecida, parece haver uma relação entre a diminuição da expressão destes genes e a perda das sinapses, que, no hipocampo, está associada à perda de memória, visível na doença.
+
 
 ### **Córtex Temporal**
 
@@ -277,23 +295,21 @@ dim(genesATemp)
 No Córtex Temporal, 8 genes anotados foram considerados diferencialmente expressos entre as duas condições.  
 
 
-### Genes sobreexpressos:
+#### **Genes sobreexpressos:**
 ```{r, warning=FALSE}
 upTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$logFC > treshold),]
 settemp.up = subsetTemp[rownames(upTemp)]
 nomes_upTemp = unlist(mget(rownames(settemp.up),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_upTemp)
 nomes_upTemp
 ```
 No Córtex Temporal, 5 dos 8 genes estão sobrexpressos na Doença de Alzheimer. 
 
-### Genes subexpressos:
+#### **Genes subexpressos:**
 
 ```{r}
 downTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$logFC < -treshold),]
 settemp.down = subsetTemp[rownames(downTemp)]
 nomes_downTemp = unlist(mget(rownames(settemp.down),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_downTemp)
 nomes_downTemp
 ```
 No Córtex Temporal, 3 dos 8 genes estão subexpressos na Doença de Alzheimer. 
@@ -313,33 +329,43 @@ for (i in 1:length(sdevnAD.Temp))
   sdevTemp = c(sdevTemp,sdevAD.Temp[i],sdevnAD.Temp[i])
 nomesTemp = unlist(mget(rownames(dfTemp),hugene10sttranscriptclusterSYMBOL))
 bp.Temp=barplot(t(dfTemp),beside=T,main="Níveis de expressão de 8 genes no Córtex Temporal",names.arg=nomesTemp, xlab = "Nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
-legend(3,10,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+legend(4,10,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Temp,t(dfTemp)+sdevTemp, bp.Temp, t(dfTemp), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
-**Figura 3 -** Comparação dos níveis de expressão de 8 genes cuja expressão diferencial é significativamente diferente no córtex temporal AD em relação a non-AD.
 
 
-### Análise de Enriquecimento para os genes sobrexpressos
+**Figura 4 -** Comparação dos níveis de expressão de 8 genes cuja expressão diferencial é significativamente diferente no córtex temporal AD em relação a non-AD.
+
+
+#### **Análise de Enriquecimento para os genes sobrexpressos**
 
 ```{r message=FALSE, warning=FALSE}
 selectedEntrezIds.up.t = unlist(mget(rownames(upTemp), hugene10sttranscriptclusterENTREZID))
 params1.up.t = new("GOHyperGParams", geneIds = selectedEntrezIds.up.t, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
-hgOverHipo = hyperGTest(params1.up.t)
-summary(hgOverHipo)
+hgOvertemp1 = hyperGTest(params1.up.t)
+summary(hgOvertemp1)[1:10,]
 ```
 
-### Análise de Enriquecimento para os genes subexpressos
+
+No córtex temporal, a maior parte dos genes sobreexpressos estão envolvidos em processos do desenvolvimento embriológico e, portanto, não relacionados com a doença de Alzheimer. Contudo, alguns dos genes estão envolvidos na resposta inflamatória e ao stress oxidativo. Quanto ao stess oxidativo, sabe-se que este ocorre na AD e acredita-se que é um fator crítico. Potencialmente é um dos eventos mais precoces, inicia os distúrbios cognitivos e é responsável por algumas características observadas na doença. Pensa-se que os mecanismos inflamatórios têm um papel no processo degenerativo que se verifica em AD, verificando-se níveis elevados de citoquinas no plasma, placas corticais e neurónios dos doentes [4].
+
+
+#### **Análise de Enriquecimento para os genes subexpressos**
 
 ```{r message=FALSE, warning=FALSE}
 selectedEntrezIds.down.t = unlist(mget(rownames(downTemp), hugene10sttranscriptclusterENTREZID))
 params1.down.t = new("GOHyperGParams", geneIds = selectedEntrezIds.down.t, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
-hgOver1 = hyperGTest(params1.down.t)
-summary(hgOver1)
+hgOverTemp2 = hyperGTest(params1.down.t)
+summary(hgOverTemp2)[1:10,]
 ```
 
-## Doença de Alzheimer vs não-Doença de Alzheimer no Córtex Frontal
+
+Os genes subexpressos no córtex temporal estão envolvidos em várias funções, como morte celular programada, regulação da via de sinalização do recetor da trombina (processo inflamatório), regulação negativa da via de sinalização de recetores acoplados à proteína G, etc. A relação entre o Alzheimer e o processo inflamatório já foi explicado anteriormente. Quanto à morte celular programada, sabe-se que há destruição de neurónios e que esse processo está muito provavelmente associado aos emaranhados neurofibrilhares e às placas amilóides, mas ainda não se sabe qual o processo que ocorre primeiro, se a destruição de neurónios, se a formação de tais estruturas [4]. Quanto à regulação da sinalização dos recetores acoplados à proteína G, estes são fundamentais nas sinapses.
+
+
+## **Córtex Frontal**
 ```{r}
 subsetFront = eset[,eset$tissue=="frontal cortex"]
 vAFront = pData(subsetFront)
@@ -369,7 +395,7 @@ dim(genesAD)
 ```
 Na Doença de Alzheimer, 9 genes estão diferencialmente expressos entre o género masculino e feminino. 
 
-### Genes sobreexpressos:
+### **Genes sobreexpressos:**
 ```{r}
 upAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC > treshold),]
 setAD.up = subAD[rownames(upAD),]
@@ -379,7 +405,7 @@ namesAD.up
 7 dos 9 genes estão sobrexpressos no género feminino. 
 
 
-### Genes subexpressos:
+### **Genes subexpressos:**
 ```{r }
 downAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC < -treshold),]
 setAD.down = subAD[rownames(downAD),]
@@ -388,32 +414,56 @@ namesAD.down
 ```
 2 dos 9 genes estão subexpressos no género feminino. 
 
-FALTA O BARPLOT
-```{r, message=FALSE, warning=FALSE}
-ssAD = subAD[c(rownames(upAD),rownames(upAD)),]
+```{r, fig.width=14}
+ssAD = subAD[c(rownames(upAD),rownames(downAD)),]
+male.g = ssAD[,ssAD$gender=="male"]
+female.g = ssAD[,ssAD$gender=="female"]
+medAD.male=rowMeans(exprs(male.g))
+medAD.female = rowMeans(exprs(female.g))
+dfg = data.frame(male=medAD.male,female=medAD.female)
+sdevAD.male = apply(exprs(male.g),1,sd)
+sdevAD.female = apply(exprs(female.g),1,sd)
+sdevg=c()
+for (i in 1:length(sdevAD.male))
+  sdevg = c(sdevg,sdevAD.female[i],sdevAD.male[i])
+nomesg = unlist(mget(rownames(dfg),hugene10sttranscriptclusterSYMBOL))
+bp.g=barplot(t(dfg),beside=T,main="",names.arg=nomesg, xlab = "Nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
+legend(0,10,legend=c("female","male"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+title("Níveis de expressão de 9 genes na Doença de Alzheimer")
+arrows(bp.g,t(dfg)+sdevg, bp.g, t(dfg), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
-**Figura 4 -** Comparação dos níveis de expressão de 8 genes cuja expressão diferencial é significativamente diferente no género feminino em relação ao masculino, na AD. 
 
 
-### Análise de Enriquecimento para os genes sobrexpressos
+**Figura 5 -** Comparação dos níveis de expressão de 9 genes cuja expressão diferencial é significativamente diferente no sexo feminino em relação ao sexo masculino em AD.
+
+
+### **Análise de Enriquecimento para os genes sobrexpressos**
 
 ```{r message=FALSE, warning=FALSE}
 selectedEntrezIds.up.g = unlist(mget(rownames(upAD), hugene10sttranscriptclusterENTREZID))
 params1.up.g = new("GOHyperGParams", geneIds = selectedEntrezIds.up.g, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
-hgOverHipo = hyperGTest(params1.up.g)
-summary(hgOverHipo)
+hgOverg1 = hyperGTest(params1.up.g)
+summary(hgOverg1)[1:10,]
 ```
 
-### Análise de Enriquecimento para os genes subexpressos
+
+
+Os genes sobreepressos no córtex frontal desempenham funções como regulação negativa da resposta inflamatória crónica, sinalização de recetores acoplados à roteína G, regulação da potenciação sináptica a longo-prazo, entre outras. A relação entre todas estas funções e a doença de Alzheimer já foi previamente explicada.
+
+
+### **Análise de Enriquecimento para os genes subexpressos**
 
 ```{r message=FALSE, warning=FALSE}
 selectedEntrezIds.down.g = unlist(mget(rownames(downAD), hugene10sttranscriptclusterENTREZID))
 params1.down.g = new("GOHyperGParams", geneIds = selectedEntrezIds.down.g, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
-hgOver1 = hyperGTest(params1.down.g)
-summary(hgOver1)
+hgOverg2 = hyperGTest(params1.down.g)
+summary(hgOverg2)[1:10,]
 ```
+
+
+Os genes subexpressos no córtex frontal estão envolvidos na demetilação de histonas, o que provoca a quebra dos nucleossomas de DNA, que, em condições atípicas provoca uma desregulação da transcrição [4]. Relacionando com AD, isto pode levar a um mal-funcionamento dos neurónios e da comunicação entre estes, podendo eventualmente, ser uma das causas da sua destruição. 
 
 
 # **Clustering**
@@ -455,18 +505,22 @@ labels_colors(dend.Hipo) <- colors_to_use
 plot(dend.Hipo, main = "Clustering Hierárquico non-AD vs AD (hipocampo)")
 legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ```  
-**Figura 4 -** _Clustering_ das amostras referentes aos genes diferencialmente expressos no hipocampo. 
+
+
+**Figura 5 -** _Clustering_ das amostras referentes aos genes diferencialmente expressos no hipocampo. 
 
 Pelo _clustering_ verifica-se que é possível separar as amostras provenientes de indivíduos com AD das amostras de controlo no hipocampo em dois _clusters_. Desta forma, conclui-se que os genes correspondentes a amostras de indivíduos com AD apresentam um nível de expressão mais próximo entre si e mais afastado dos genes que provêm de amostras de controlo. Esta divisão era esperado, pois está concordante com os resultados da análise de expressão diferencial.
 
-# **_Heatmap_:**
+**_Heatmap_:**
 ```{r}
-tissuecolorsh <- unlist(lapply(ssHipo$disease.state, color.map.tissue))
-heatmap(exprs(ssHipo),ColSideColors = tissuecolorsh, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
+tissuecolorsh <- unlist(lapply(Hipo.todos$disease.state, color.map.tissue))
+heatmap(dados.Hipo,ColSideColors = tissuecolorsh, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
         ylab = "Sondas", xlab = "Amostras", main = "Heatmap (Hipocampo)")
 legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
 ```
-**Figura 5 -** _Heatmap_ dos dados de expressão do hipocampo.
+
+
+**Figura 6 -** _Heatmap_ dos dados de expressão do hipocampo.
 
 Analisando o _heatmap_, verifica-se uma evidente separação das amostras, tal como no _cluster_ anterior. Para além disso, observa-se vários agrupamentos dos genes, que parecem estar agrupados consoante os seus níveis de expressão já que se percebe uma diminuição da intensidade da côr do topo para a base do _heatmap_ na porção correspondente às amostras AD, apesar de esta distinção não ser tão clara como aquela das amostras.
 
@@ -491,19 +545,23 @@ labels_colors(dend.Temp) <- colors_to_use
 plot(dend.Temp, main = "Clustering Hierárquico non-AD vs AD (Cortex Temporal)")
 legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ```
-**Figura 6 -** _Clustering_ das amostras referentes aos genes diferencialmente expressos no córtex temporal. 
+
+
+**Figura 7 -** _Clustering_ das amostras referentes aos genes diferencialmente expressos no córtex temporal. 
 
 Pelo _clustering_ verifica-se que não é possível separar completamente as amostras provenientes de indivíduos com AD das amostras de controlo no córtex temporal em dois _clusters_. Desta forma, conclui-se que apenas alguns genes correspondentes a amostras de indivíduos com AD apresentam um nível de expressão mais próximo entre si e mais afastado dos genes que provêm de amostras de controlo. Isto indica que nem todos os genes têm uma expressão diferencial significativa neste tecido, sendo portanto, menos afetado que o hipocampo.
 
 **_Heatmap_:**
 ```{r}
-tissuecolorst <- unlist(lapply(ssTemp$disease.state, color.map.tissue))
-heatmap(exprs(ssTemp),ColSideColors = tissuecolorst, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
+tissuecolorst <- unlist(lapply(Temp.todos$disease.state, color.map.tissue))
+heatmap(dados.Temp,ColSideColors = tissuecolorst, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
         ylab = "Sondas", xlab = "Amostras", main = "Heatmap (Cortex Temporal)")
 
 legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
 ```
-**Figura 7 -** _Heatmap_ dos dados de expressão do córtex temporal.
+
+
+**Figura 8 -** _Heatmap_ dos dados de expressão do córtex temporal.
 
 Analisando o _heatmap_, verifica-se que as amostras não são totalmente separadas, tal como no _cluster_ anterior. (Falta aqui o resto da interpretação, tenho de ver o heatmap antes de escrever)
 
@@ -636,6 +694,15 @@ ms3$table; ms3$overal[1]
 
 Por fim, este modelo também previu o género com uma _Accuracy_ de 100%. 
 
+# Conclusão
+
+A doença de Alzheimer é considerada uma das doenças do mundo moderno, tendo a sua incidência e prevalência vindo  a aumentar devido ao envelhecimento da população. Contudo, apesar dos vários estudos nesta área que tentam perceber a sua patofisiologia e numa última instância encontrar uma cura, a causa desta doença continua um mistério. Desta forma,  a análise de expressão diferencial dos tecidos mais afetados por esta doença é fundamental. Pela análise feita, foi possível inferir algumas alterações relacionadas com a sintomatologia da doença e relacioná-las com aquilo que já se sabe sobre o processo de degeneração neuronal.
+
+Consideramos que cumprimos os objetivos propostos e que este trabalho nos enriqueceu em termos de conhecimento sobre as ferramentas do Rstudio, rmarkdown e doença de Alzheimer.
+
+Por fim, este modelo também previu o género com uma _Accuracy_ de 100%. Deste modo, é possível verificar que todos os métodos utilizados apresentam bons resultados, sendo que a melhor previsão foi do modelo de SVM's, que obteve 100% de _Accuracy_ nos três tipos de análise, ou seja, acertou na classificação de estado de doença, de tecido e de géner de todas as amostras.
+
+
 #Bibliografia
 
 1 - M. Hokama, S. Oka, J. Leon, T. Ninomiya, H. Honda, K. Sasaki, T. Iwaki, T. Ohara, T. Sasaki, F. M. LaFerla, Y. Kiyohara, Y. Nakabeppu, Altered Expression of Diabetes-Related Genes in Alzheimer's Disease Brains: The Hisayama Study, Cerebral Cortex September (2014); 24:2476-2488
@@ -644,4 +711,4 @@ Por fim, este modelo também previu o género com uma _Accuracy_ de 100%.
 
 3 - S. E Lakhan, Jun 13, 2017, Medscape: Alzheimer disease. Acedido em 5/06/2017. http://emedicine.medscape.com/article/1134817-overview#a6
 
-
+4 - S. E Lakhan, Jun 13, 2017, Medscape: Alzheimer disease. Acedido em 5/06/2017. http://emedicine.medscape.com/article/1134817-overview#a4
