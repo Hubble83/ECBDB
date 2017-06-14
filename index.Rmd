@@ -16,10 +16,19 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache=TRUE)
 ```
-# **1| Introdução**
+# **Introdução**
+Milhões de pessoas em todo o mundo sofrem de demência, sendo que se prevê a quadruplicação deste número nos próximos 25 anos. Tal facto deve-se ao aumento da esperança média de vida e consequente aumento do número de pessoas idosas. A doença do Alzheimer (AD) é uma das formas mais comuns de demência nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cérebro levando à perda de memória, pensamento e a distúrbios comportamentais. Atualmente existem tratamentos para a doença, porém apenas retardam a sua evolução. Por não haver ainda uma cura para a AD, e porque a prevenção é crucial para a diminuição da taxa de incidência desta doença, é necessário perceber quais os fatores de risco e causas a que levam à demência causada pela doença. O metabolismo da glucose e a insulina são exemplo desses fatores, onde o organismo em situações de hiperinsulenemia e hiperglicemia causadas por resistência à insulina pode acelerar esse processo. Isto deve-se ao aumento da formação de placas neuríticas em conjunto com efeito da APOE 
+
+**NOTA: COLOCAR \epsilon EPSILON AQUI**
+
+4, sendo um fator de risco da AD.
+
+O objetivo deste trabalho é selecionar 
+
+Neste trabalho foram analisados diferentes tecidos de cérebro de indivíduos pós-morte residentes em Hisayma que tenham sido diagnosticados com a doença do Alzheimer ou um distúrbio relaciona com a AD. No nosso conjunto de dados temos um total de 79 amostras de expressão de genes do organismo Homo Sapiens, variando o tipo de tecido do cérebro, podendo ser pertencente ao hipocampo, córtex temporal ou ao córtex frontal. Também há outras duas variáveis nos nossos dados, como o sexo, feminino ou masculino e o estado da doença, se têm ou não AD. 
 
 
-# **2| Dados**
+# **Dados**
 
 
 ```{r lib,echo=FALSE,message=FALSE}
@@ -38,7 +47,7 @@ library(dendextend)
 ``` 
 
 
-## **2.1| Carregamento dos e visualização dos dados**
+## **Carregamento dos e visualização dos dados**
 
 
 ```{r data, message=FALSE, warning=FALSE}
@@ -67,7 +76,7 @@ Analisando o _Boxplot_, é possível verificar que os dados seguem uma distribuiçã
 
 
 
-## **2.2| MetaDados**
+## **MetaDados**
 
 
 ```{r meta}
@@ -104,10 +113,10 @@ ftable(vars$tissue, vars$gender, vars$disease.state, dnn = c("Tissue", "Gender",
 
 
 
-# **3| Pré-processamento**
+# **Pré-processamento**
 
 
-## **3.1| Verificação da presença de dados omissos**
+## **Verificação da presença de dados omissos**
 
 
 ```{r na}
@@ -116,7 +125,7 @@ sum(is.na(dados))
 Concluí-se que os dados não contêm valores omissos.
 
 
-## **3.2| Filtração dos dos dados
+## **Filtração dos dos dados
 
 **Retirar dados das sondas que correspondem a genes sem anotação:**
 ```{r subset}
@@ -146,13 +155,13 @@ abline(v = med*2, col = "green",lwd = 3,lty = 2)
 Procedeu-se, ainda, à filtração dos dados pela mediana, por forma a reduzir a quantidade de dados em estudo e, assim, tornar o processo computacionalmente mais rápido, necessário para a análise de _Machine Learning_.
 
 
-# **4| Análise de Expressão Diferencial e de Enriquecimento**
+# **Análise de Expressão Diferencial e de Enriquecimento**
 
-## **4.1| Doença de Alzheimer vs Controlo**
+## **Doença de Alzheimer vs Controlo**
 Como já referido, foi utilizado o subset com dados relativos apenas aos genes anotados.
 
 
-### **4.1.1| Hipocampo**
+### **Hipocampo**
 
 
 
@@ -362,8 +371,11 @@ namesAD.down
 ```
 FALTA A TABELA
 ### Análise de Enriquecimento para os genes sobrexpressos
+
 ### Análise de Enriquecimento para os genes subexpressos
+
 # Clustering
+
 ## Hipocampo
 ```{r shipo}
 ssHipo = subsethipo[rownames(genesAHipo),]
@@ -432,13 +444,13 @@ heatmap(exprs(ssTemp),ColSideColors = tissuecolorst, cexRow = 0.5, distfun = dis
 legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
 ```
 
-# **| Análise preditiva**
+# **Análise preditiva**
 
 
 Para realizar a análise preditiva do conjunto de dados, optou-se por usar o package Caret, que permite simplificar o processo de criação de modelos preditivos, ao facilitar várias tarefas como a estimação de parâmetros. Foi então realizada a previsão do estado de doença (Alzheimer, não-Alzheimer), do tipo de tecido (Hipocampo, Córtex Temporal, Córtex Frontal) e do género (Feminino, Masculino). Os métodos de aprendizagem usados nesta análise incluiram K-vizinhos mais próximos, árvores de decisão e máquinas de vetor de suporte (SVMs), sendo que foi escolhido o método de validação cruzada com 10 folds na seleção de modelos. Para esta análise, foi usado o conjunto de dados filtrado, eset.f. 
 
-## .1|Para o estado de doença
-### .1.1| Análise dos K vizinhos mais próximos
+## Para o estado de doença
+### Análise dos K vizinhos mais próximos
 
 
 ```{r knn1,message=FALSE}
@@ -452,7 +464,7 @@ mk1$table; mk1$overal[1]
 Como se pode verificar, este modelo previu o estado de doença com uma _Accuracy_ de, aproximadamente, 72.2%, que representa a percentagem de exemplos corretamente classificados pelo modelo. 
 
 
-### .1.2| Árvores de Decisão
+### Árvores de Decisão
 
 
 ```{r tree1,message=FALSE}
@@ -466,7 +478,7 @@ mt1$table; mt1$overal[1]
 Este modelo previu o estado de doença com uma _Accuracy_ de, aproximadamente, 87.3%.
 
 
-### .1.3| Máquinas de Vetores de Suportes (SVM's)
+### Máquinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm1,message=FALSE}
@@ -480,8 +492,8 @@ ms1$table; ms1$overal[1]
 Este modelo previu o estado de doença com uma _Accuracy_ de 100%, acertando na classificação de todos os exemplos. 
 
 
-## .2| Para o tipo de tecido
-### .2.1| Análise dos K vizinhos mais próximos
+## Para o tipo de tecido
+###  Análise dos K vizinhos mais próximos
 
 
 ```{r knn2,message=FALSE}
@@ -494,7 +506,7 @@ mk2$table; mk2$overal[1]
 
 Já para o tipo de tecido, este modelo previu com uma _Accuracy_ de 91.1%, aproximadamente.
 
-### .2.2| Árvores de Decisão
+### Árvores de Decisão
 
 
 ```{r tree2,message=FALSE}
@@ -507,7 +519,7 @@ mt2$table; mt2$overal[1]
 
 Este modelo previu o tipo de tecido com uma _Accuracy_ de 100%.
 
-### .2.3| Máquinas de Vetores de Suportes (SVM's)
+### Máquinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm2,message=FALSE}
@@ -521,8 +533,8 @@ ms2$table; ms2$overal[1]
 Este modelo também previu o tipo de tecido com uma _Accuracy_ de 100%. 
 
 
-## .3|Para o género
-### .3.1| Análise dos K vizinhos mais próximos
+## Para o género
+### Análise dos K vizinhos mais próximos
 
 
 ```{r knn3,message=FALSE}
@@ -535,7 +547,7 @@ mk3$table; mk3$overal[1]
 
 Na previsão do género, este modelo obteve uma _Accuracy_ de 97.5%, aproximadamente. 
 
-### .3.2| Árvores de Decisão
+### Árvores de Decisão
 
 
 ```{r tree3,message=FALSE}
@@ -548,7 +560,7 @@ mt3$table; mt3$overal[1]
 
 Este modelo previu o género com uma _Accuracy_ de 100%. 
 
-### .3.3| Máquinas de Vetores de Suportes (SVM's)
+### Máquinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm3,message=FALSE}
