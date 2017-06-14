@@ -522,7 +522,7 @@ legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocola
 
 **Figura 6 -** _Heatmap_ dos dados de expressão do hipocampo.
 
-Analisando o _heatmap_, verifica-se uma evidente separação das amostras, tal como no _cluster_ anterior. Para além disso, observa-se vários agrupamentos dos genes, que parecem estar agrupados consoante os seus níveis de expressão já que se percebe uma diminuição da intensidade da côr do topo para a base do _heatmap_ na porção correspondente às amostras AD, apesar de esta distinção não ser tão clara como aquela das amostras.
+Analisando o _heatmap_, verifica-se uma evidente separação das amostras, tal como no _cluster_ anterior. Para além disso, observa-se vários agrupamentos dos genes, que parecem estar agrupados consoante os seus níveis de expressão, já que se percebe uma grande porção com uma côr mais intensa (genes sobreexpressos) à esquerda do gráfico pertecente às amostras AD e uma porção com côr menos intensa (genes subexpressos) abaixo da anterior.
 
 
 ## **Córtex Temporal**
