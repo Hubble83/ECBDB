@@ -22,10 +22,9 @@ output:
 knitr::opts_chunk$set(cache=TRUE)
 ```
 # Introdução
-Milhões de pessoas em todo o mundo sofrem de demência, sendo que se prevê a quadruplicação deste número nos próximos 25 anos. Tal facto deve-se ao aumento da esperança média de vida e consequente aumento do número de idosos. A doença de Alzheimer (AD) é uma das formas mais comuns de demência nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cérebro, levando à perda de memória, pensamento e distúrbios comportamentais. Atualmente, existe tratamento para a doença, porém apenas retarda a sua evolução. Por não haver ainda uma cura para a AD e porque a prevenção é crucial para a diminuição da taxa de incidência desta doença, é necessário perceber quais os fatores de risco e causas que a provocam. O metabolismo da glucose e a insulina são exemplos desses fatores, onde o organismo em situações de hiperinsulenémia e hiperglicémia, causadas por resistência à insulina, pode acelerar esse processo. Isto deve-se ao aumento da formação de placas neuríticas em conjunto com efeito da APOE &epsilon;4, que se sabe estarem envolvidas na patofisiologia de AD.
+Milhões de pessoas em todo o mundo sofrem de demência, sendo que se prevê a quadruplicação deste número nos próximos 25 anos.(1) (2) Tal facto deve-se ao aumento da esperança média de vida e consequente aumento do número de idosos. A doença de Alzheimer (AD) é uma das formas mais comuns de demência nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cérebro, levando à perda de memória, pensamento e distúrbios comportamentais.(2) (3) A incidência da AD é díspare em relação aos sexos, sendo mais notória no sexo feminino (dois terços nos USA). (3) Atualmente, existe tratamento para a doença, porém apenas retarda a sua evolução. Por não haver ainda uma cura para a AD e porque a prevenção é crucial para a diminuição da taxa de incidência desta doença, é necessário perceber quais os fatores de risco e causas que a provocam. O metabolismo da glucose e a insulina são exemplos desses fatores, onde o organismo em situações de hiperinsulenémia e hiperglicémia, causadas por resistência à insulina, pode acelerar esse processo. Isto deve-se ao aumento da formação de placas neuríticas em conjunto com efeito da APO??4, que se sabe estarem envolvidas na patofisiologia de AD. (1) (2)
 
 O objetivo deste trabalho passou pela análise de um conjunto de dados de expressão génica, com recurso  ao programa Rstudio e aos packages do Bioconductor.
-
 Neste trabalho, foram analisadas 79 amostras, de diferentes tecidos encefálicos, provenientes de necrópsias de indivíduos residentes em Hisayma diagnosticados com aAlzheimer ou um distúrbio relacionado (controlo). Os tipos de tecido analisados correspondem ao hipocampo, córtex temporal ou córtex frontal. 
 
 
@@ -119,10 +118,10 @@ ftable(vars$tissue, vars$gender, vars$disease.state, dnn = c("Tissue", "Gender",
 
 
 
-# Pré-processamento
+# **Pré-processamento**
 
 
-## Verificação da presença de dados omissos
+## **Verificação da presença de dados omissos**
 
 
 ```{r na}
@@ -131,7 +130,7 @@ sum(is.na(dados))
 Concluí-se que os dados não contêm valores omissos.
 
 
-## Filtração dos dos dados
+## **Filtração dos dos dados
 
 **Retirar dados das sondas que correspondem a genes sem anotação:**
 ```{r subset}
@@ -220,7 +219,8 @@ No hipocampo, 80 dos 83 genes estão subexpressos na Doença de Alzheimer.
 
 
 
-```{r, message=FALSE, warning=FALSE, fig.width=14}
+```{r, message=FALSE, warning=FALSE, fig.width=15}
+ssHipo = subsethipo[c(rownames(upHipo),rownames(downHipo)),]
 ssHipo1 = ssHipo[1:12,]
 AD.Hipo = ssHipo1[,ssHipo$disease.state=="Alzheimer's disease"]
 nAD.Hipo = ssHipo1[,ssHipo$disease.state=="non-Alzheimer's disease"]
@@ -233,8 +233,8 @@ sdevHipo=c()
 for (i in 1:length(sdevnAD.Hipo))
   sdevHipo = c(sdevHipo,sdevAD.Hipo[i],sdevnAD.Hipo[i])
 nomesHipo = unlist(mget(rownames(dfHipo),hugene10sttranscriptclusterSYMBOL))
-bp.Hipo=barplot(t(dfHipo),beside=T,main="Niveis de expressao de 12 genes no hipocampo",names.arg=nomesHipo, xlab = "nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
-legend(3,12,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+bp.Hipo=barplot(t(dfHipo),beside=T,main="Níveis de expressão de 12 genes no hipocampo",names.arg=nomesHipo, xlab = "Nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
+legend(5,11,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Hipo,t(dfHipo)+sdevHipo, bp.Hipo, t(dfHipo), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
 **Figura 2 -** Comparação dos níveis de expressão de 12 genes cuja expressão diferencial é significativamente diferente no hipocampo AD em relação a non-AD.
@@ -300,6 +300,7 @@ No Córtex Temporal, 3 dos 8 genes estão subexpressos na Doença de Alzheimer.
 
 
 ```{r, message=FALSE, warning=FALSE, fig.width=12}
+ssTemp = subsetTemp[c(rownames(upTemp),rownames(downTemp)),]
 AD.Temp = ssTemp[,ssTemp$disease.state=="Alzheimer's disease"]
 nAD.Temp = ssTemp[,ssTemp$disease.state=="non-Alzheimer's disease"]
 medAD.Temp=rowMeans(exprs(AD.Temp))
@@ -311,11 +312,11 @@ sdevTemp=c()
 for (i in 1:length(sdevnAD.Temp))
   sdevTemp = c(sdevTemp,sdevAD.Temp[i],sdevnAD.Temp[i])
 nomesTemp = unlist(mget(rownames(dfTemp),hugene10sttranscriptclusterSYMBOL))
-bp.Temp=barplot(t(dfTemp),beside=T,main="Niveis de expressao de 12 genes no Córtex Temporal",names.arg=nomesTemp, xlab = "nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
+bp.Temp=barplot(t(dfTemp),beside=T,main="Níveis de expressão de 8 genes no Córtex Temporal",names.arg=nomesTemp, xlab = "Nome dos genes", ylab = "Nível de expressão média",col=c("turquoise","mediumvioletred"))
 legend(3,10,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Temp,t(dfTemp)+sdevTemp, bp.Temp, t(dfTemp), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
-**Figura 3 -** Comparação dos níveis de expressão de 12 genes cuja expressão diferencial é significativamente diferente no córtex temporal AD em relação a non-AD.
+**Figura 3 -** Comparação dos níveis de expressão de 8 genes cuja expressão diferencial é significativamente diferente no córtex temporal AD em relação a non-AD.
 
 
 ### Análise de Enriquecimento para os genes sobrexpressos
@@ -373,7 +374,6 @@ Na Doença de Alzheimer, 9 genes estão diferencialmente expressos entre o género 
 upAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC > treshold),]
 setAD.up = subAD[rownames(upAD),]
 namesAD.up = unlist(mget(rownames(setAD.up),hugene10sttranscriptclusterSYMBOL))
-dim(namesAD.up)
 namesAD.up
 ```
 7 dos 9 genes estão sobrexpressos no género feminino. 
@@ -384,10 +384,15 @@ namesAD.up
 downAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC < -treshold),]
 setAD.down = subAD[rownames(downAD),]
 namesAD.down = unlist(mget(rownames(setAD.down),hugene10sttranscriptclusterSYMBOL))
-dim(namesAD.down)
 namesAD.down
 ```
 2 dos 9 genes estão subexpressos no género feminino. 
+
+FALTA O BARPLOT
+```{r, message=FALSE, warning=FALSE}
+ssAD = subAD[c(rownames(upAD),rownames(upAD)),]
+```
+**Figura 4 -** Comparação dos níveis de expressão de 8 genes cuja expressão diferencial é significativamente diferente no género feminino em relação ao masculino, na AD. 
 
 
 ### Análise de Enriquecimento para os genes sobrexpressos
@@ -630,5 +635,13 @@ ms3$table; ms3$overal[1]
 
 
 Por fim, este modelo também previu o género com uma _Accuracy_ de 100%. 
+
+#Bibliografia
+
+1 - M. Hokama, S. Oka, J. Leon, T. Ninomiya, H. Honda, K. Sasaki, T. Iwaki, T. Ohara, T. Sasaki, F. M. LaFerla, Y. Kiyohara, Y. Nakabeppu, Altered Expression of Diabetes-Related Genes in Alzheimer's Disease Brains: The Hisayama Study, Cerebral Cortex September (2014); 24:2476-2488
+
+2 - Matsuzaki T, Sasaki K, Tanizaki Y, Hata J, Fujimi K, Matsui Y, Sekita A, Suzuki S, Kanba S, Kiyohara Y et al. 2010. Insulin resistance is associated with the pathology of Alzheimer disease: the Hisayama study. Neurology. 75:764-770.
+
+3 - S. E Lakhan, Jun 13, 2017, Medscape: Alzheimer disease. Acedido em 5/06/2017. http://emedicine.medscape.com/article/1134817-overview#a6
 
 
