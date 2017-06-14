@@ -2,7 +2,7 @@
 output_dir: "."
 title: "Altered Expression of Diabetes-Related Genes in Alzheimer's Disease Brains"
 subtitle: " The Hisayama Study"
-authors: "Beatriz Magalh„es PG32936 | Cl·udio NÛvoa PG----- | Jo„o Afonso A71874 | Marta Sampaio PG32927"
+authors: "Beatriz Magalh√£es PG32936 | Cl√°udio N√≥voa PG----- | Jo√£o Afonso A71874 | Marta Sampaio PG32927"
 date: "14 de Junho de 2017"
 output:
   html_document:
@@ -16,16 +16,15 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache=TRUE)
 ```
-# **IntroduÁ„o**
-Milhıes de pessoas em todo o mundo sofrem de demÍncia, sendo que se prevÍ a quadruplicaÁ„o deste n˙mero nos prÛximos 25 anos. Tal facto deve-se ao aumento da esperanÁa mÈdia de vida e consequente aumento do n˙mero de pessoas idosas. A doenÁa do Alzheimer (AD) È uma das formas mais comuns de demÍncia nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cÈrebro levando ‡ perda de memÛria, pensamento e a dist˙rbios comportamentais. Atualmente existem tratamentos para a doenÁa, porÈm apenas retardam a sua evoluÁ„o. Por n„o haver ainda uma cura para a AD, e porque a prevenÁ„o È crucial para a diminuiÁ„o da taxa de incidÍncia desta doenÁa, È necess·rio perceber quais os fatores de risco e causas a que levam ‡ demÍncia causada pela doenÁa. O metabolismo da glucose e a insulina s„o exemplo desses fatores, onde o organismo em situaÁıes de hiperinsulenemia e hiperglicemia causadas por resistÍncia ‡ insulina pode acelerar esse processo. Isto deve-se ao aumento da formaÁ„o de placas neurÌticas em conjunto com efeito da APOE 
+# **Introdu√ß√£o**
+Milh√µes de pessoas em todo o mundo sofrem de dem√™ncia, sendo que se prev√™ a quadruplica√ß√£o deste n√∫mero nos pr√≥ximos 25 anos. Tal facto deve-se ao aumento da esperan√ßa m√©dia de vida e consequente aumento do n√∫mero de pessoas idosas. A doen√ßa do Alzheimer (AD) √© uma das formas mais comuns de dem√™ncia nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do c√©rebro levando √† perda de mem√≥ria, pensamento e a dist√∫rbios comportamentais. Atualmente existem tratamentos para a doen√ßa, por√©m apenas retardam a sua evolu√ß√£o. Por n√£o haver ainda uma cura para a AD e porque a preven√ß√£o √© crucial para a diminui√ß√£o da taxa de incid√™ncia desta doen√ßa, √© necess√°rio perceber quais os fatores de risco e causas que levam √† dem√™ncia causada pela doen√ßa. O metabolismo da glucose e a insulina s√£o exemplos desses fatores, onde o organismo em situa√ß√µes de hiperinsulenemia e hiperglicemia causadas por resist√™ncia √† insulina pode acelerar esse processo. Isto deve-se ao aumento da forma√ß√£o de placas neur√≠ticas em conjunto com efeito da APOE 
 
 **NOTA: COLOCAR \epsilon EPSILON AQUI**
 
 4, sendo um fator de risco da AD.
 
-O objetivo deste trabalho È selecionar 
-
-Neste trabalho foram analisados diferentes tecidos de cÈrebro de indivÌduos pÛs-morte residentes em Hisayma que tenham sido diagnosticados com a doenÁa do Alzheimer ou um dist˙rbio relaciona com a AD. No nosso conjunto de dados temos um total de 79 amostras de express„o de genes do organismo Homo Sapiens, variando o tipo de tecido do cÈrebro, podendo ser pertencente ao hipocampo, cÛrtex temporal ou ao cÛrtex frontal. TambÈm h· outras duas vari·veis nos nossos dados, como o sexo, feminino ou masculino e o estado da doenÁa, se tÍm ou n„o AD. 
+O objetivo deste trabalho √© analisar um conjunto de dados de express√£o gen√©tica usando o programa R e os packages do Bioconductor.
+Neste trabalho foram analisados diferentes tecidos de c√©rebro de indiv√≠duos p√≥s-morte residentes em Hisayma que tenham sido diagnosticados com a doen√ßa do Alzheimer ou um dist√∫rbio relacionado com a AD. O conjunto de dados cont√©m um total de 79 amostras de express√£o de genes do organismo Homo Sapiens, variando o tipo de tecido do c√©rebro, podendo ser pertencente ao hipocampo, c√≥rtex temporal ou c√≥rtex frontal. Tamb√©m h√° outras duas vari√°veis nos nossos dados, como o sexo, feminino ou masculino e o estado da doen√ßa, se t√™m ou n√£o AD. 
 
 
 # **Dados**
@@ -47,7 +46,7 @@ library(dendextend)
 ``` 
 
 
-## **Carregamento dos e visualizaÁ„o dos dados**
+## **Carregamento dos e visualiza√ß√£o dos dados**
 
 
 ```{r data, message=FALSE, warning=FALSE}
@@ -72,7 +71,7 @@ legend("topright", legend=c("AD","non-AD"), col = c(72,73), pch=c(19), title="Co
 **Figura 1 -** _Boxplot_ dos dados.
 
 
-Analisando o _Boxplot_, È possÌvel verificar que os dados seguem uma distribuiÁ„o normal, pois as caixas apresentam uma distribuiÁ„o simÈtrica. Para alÈm disso, as mesmas apresentam centros de dados e ampitudes semelhantes.
+Analisando o _Boxplot_, √© poss√≠vel verificar que os dados seguem uma distribui√ß√£o normal, pois as caixas apresentam uma distribui√ß√£o sim√©trica. Para al√©m disso, as mesmas apresentam centros de dados e ampitudes semelhantes.
 
 
 
@@ -86,10 +85,10 @@ names(vars)
 
 
 Os metadados encontram-se organizados em 4 campos, nomeadamente:
-* _sample_ -> indica o cÛdigo da amostra;
-* _disease.state_ -> indica a condiÁ„o do indivÌduo do qual a amostra foi recolhida;
+* _sample_ -> indica o c√≥digo da amostra;
+* _disease.state_ -> indica a condi√ß√£o do indiv√≠duo do qual a amostra foi recolhida;
 * _tissue_ -> indica o tipo de tecido da amostra;
-* _gender_ -> indica o sexo do indivÌduo do qual a amostra foi recolhida.
+* _gender_ -> indica o sexo do indiv√≠duo do qual a amostra foi recolhida.
 
 
 ```{r disease.state}
@@ -106,28 +105,29 @@ levels(vars$gender)
 
 
 
-**Tabela 1 -** FrequÍncia absoluta das amostras para as vari·veis tecido, sexo e condiÁ„o.
+
+**Tabela 1 -** Frequ√™ncia absoluta das amostras para as vari√°veis tecido, sexo e condi√ß√£o.
 ```{r table}
 ftable(vars$tissue, vars$gender, vars$disease.state, dnn = c("Tissue", "Gender", "Disease state"))
 ```
 
 
 
-# **PrÈ-processamento**
+# **Pr√©-processamento**
 
 
-## **VerificaÁ„o da presenÁa de dados omissos**
+## **Verifica√ß√£o da presen√ßa de dados omissos**
 
 
 ```{r na}
 sum(is.na(dados))
 ```
-ConcluÌ-se que os dados n„o contÍm valores omissos.
+Conclu√≠-se que os dados n√£o cont√™m valores omissos.
 
 
-## **FiltraÁ„o dos dos dados
+## **Filtra√ß√£o dos dos dados
 
-**Retirar dados das sondas que correspondem a genes sem anotaÁ„o:**
+**Retirar dados das sondas que correspondem a genes sem anota√ß√£o:**
 ```{r subset}
 genesymbol = unlist(mget(rownames(eset),hugene10sttranscriptclusterSYMBOL))
 d = as.data.frame(genesymbol)
@@ -138,7 +138,7 @@ dim(subeset)
 
 
 
-Foi criado um subset constituÌdo apenas pelos dados relativos a genes com anotaÁ„o, utilizado na an·lise de express„o diferencial.
+Foi criado um subset constitu√≠do apenas pelos dados relativos a genes com anota√ß√£o, utilizado na an√°lise de express√£o diferencial.
 
 
 **Filtrar dados pela mediana:**
@@ -147,23 +147,25 @@ sd = rowSds(exprs(subeset))
 med = median(sd)
 eset.f = subeset[sd>2*med,]
 dim(eset.f)
-hist(sd,breaks = 50,ylim = c(0,4000),col = "blue",xlab = 'Desvio padr„o',ylab = 'FrequÍncia',main = NULL)
+hist(sd,breaks = 50,ylim = c(0,4000),col = "blue",xlab = 'Desvio padr√£o',ylab = 'Frequ√™ncia',main = NULL)
 abline(v = med*2, col = "green",lwd = 3,lty = 2)
 ``` 
 
 
-Procedeu-se, ainda, ‡ filtraÁ„o dos dados pela mediana, por forma a reduzir a quantidade de dados em estudo e, assim, tornar o processo computacionalmente mais r·pido, necess·rio para a an·lise de _Machine Learning_.
+Procedeu-se, ainda, √† filtra√ß√£o dos dados pela mediana, por forma a reduzir a quantidade de dados em estudo e, assim, tornar o processo computacionalmente mais r√°pido, necess√°rio para a an√°lise de _Machine Learning_.
 
 
-# **An·lise de Express„o Diferencial e de Enriquecimento**
+# **An√°lise de Express√£o Diferencial e de Enriquecimento**
 
-## **DoenÁa de Alzheimer vs Controlo**
-Como j· referido, foi utilizado o subset com dados relativos apenas aos genes anotados.
+Foram realizadas an√°lises de express√£o diferencial entre Doen√ßa de Alzheimer e controlo (n√£o-Doen√ßa de Alzheimer) para os dados referentes a cada tecido (Hipocampo, C√≥rtex Temporal e C√≥rtex Frontal), de forma a detetar qual o tecido mais afetado pela doen√ßa e, adicionalmente, foi realizada uma an√°lise de express√£o diferencial entre Masculino e Feminino para os dados da Doen√ßa de Alzheimer, para confirmar a maior predisposi√ß√£o desta doen√ßa no sexo Feminino.
+Estas an√°lises foram realizadas utilizando o package limma que usa modelos lineares para avaliar a express√£o diferencial de experi√™ncias multifatoriais, sendo o m√©todo ideal para este tipo de an√°lises.  
+Na an√°lise de express√£o diferencial usou-se o Expression Set completo, contudo na identifica√ß√£o de genes siginificativamente sobrexpressos e subexpressos analisaram-se apenas os genes anotados, com p-value < 0.05 e Fold Change > 1.563, para estar de acordo com a an√°lise realizada no artigo. 
+De seguida, foi realizada a an√°lise de enriquecimento onde os genes identificados na an√°lise anterior s√£o comparados com outros conjuntos de genes, onde cada um destes cont√©m genes com fun√ß√µes biol√≥gicas semelhantes, com objetivo de verificar se nos genes identificados existe enriquecimento estatisticamente significativo de algum/v√°rios conjuntos. Nesta an√°lise foi usado o package GOstats que permite a an√°lise funcional dos genes de interesse, associando-os a termos de Gene Ontology (GO). 
 
+## **Doen√ßa de Alzheimer vs Controlo**
 
 ### **Hipocampo**
-
-
+Cria√ß√£o do modelo linear, definindo controlo como refer√™ncia:
 
 ```{r hipo}
 subsethipo = eset[,eset$tissue=="hippocampus"]
@@ -180,6 +182,7 @@ genesAHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & (diffAHipo.a
 dim(genesAHipo)
 ```
 
+No Hipocampo, 83 genes anotados foram considerados diferencialmente expressos entre as duas condi√ß√µes.  
 
 
 #### Genes sobreexpressos:
@@ -191,6 +194,7 @@ upHipo
 set.up = subsethipo[rownames(upHipo)]
 nomes_upHipo = unlist(mget(rownames(set.up),hugene10sttranscriptclusterSYMBOL))
 ```
+No hipocampo, 3 dos 83 genes est√£o sobrexpressos na Doen√ßa de Alzheimer. 
 
 ```{r warning=FALSE,message=FALSE}
 Vd1_upHipo = nomes_upHipo[subsethipo$disease.state == "Alzheimer's disease"]
@@ -207,9 +211,11 @@ md2_upHipo
 
 ```{r hipoDown}
 downHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & diffAHipo.anot$logFC < -treshold),]
+downHipo[1:3,]
 set.down = subsethipo[rownames(downHipo)]
 nomes_downHipo = unlist(mget(rownames(set.down),hugene10sttranscriptclusterSYMBOL))
 ```
+No hipocampo, 80 dos 83 genes est√£o subexpressos na Doen√ßa de Alzheimer. 
 
 ```{r warning=FALSE,message=FALSE}
 Vd1_downHipo = nomes_downHipo[subsethipo$disease.state == "Alzheimer's disease"]
@@ -217,12 +223,10 @@ Vd2_downHipo = nomes_downHipo[subsethipo$disease.state != "Alzheimer's disease"]
 md_downHipo <- matrix(c(Vd1_downHipo,Vd2_downHipo),ncol=2,byrow=FALSE)
 colnames(md_downHipo)<- c("AD","non-AD")
 md2_downHipo <- as.table(md_downHipo)
-md2_downHipo
+md2_downHipo[1:10,]
 ```
 
-####Barplot
-
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.width=14}
 ssHipo1 = ssHipo[1:12,]
 AD.Hipo = ssHipo1[,ssHipo$disease.state=="Alzheimer's disease"]
 nAD.Hipo = ssHipo1[,ssHipo$disease.state=="non-Alzheimer's disease"]
@@ -235,32 +239,32 @@ sdevHipo=c()
 for (i in 1:length(sdevnAD.Hipo))
   sdevHipo = c(sdevHipo,sdevAD.Hipo[i],sdevnAD.Hipo[i])
 nomesHipo = unlist(mget(rownames(dfHipo),hugene10sttranscriptclusterSYMBOL))
-bp.Hipo=barplot(t(dfHipo),beside=T,main="Niveis de expressao de 12 genes no hipocampo",names.arg=nomesHipo, xlab = "nome dos genes", ylab = "NÌvel de express„o mÈdia",col=c("turquoise","mediumvioletred"))
-legend(0,12.2,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+bp.Hipo=barplot(t(dfHipo),beside=T,main="Niveis de expressao de 12 genes no hipocampo",names.arg=nomesHipo, xlab = "nome dos genes", ylab = "N√≠vel de express√£o m√©dia",col=c("turquoise","mediumvioletred"))
+legend(3,12,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Hipo,t(dfHipo)+sdevHipo, bp.Hipo, t(dfHipo), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
 
 
-### An·lise de Enriquecimento para os genes sobrexpressos
+### An√°lise de Enriquecimento para os genes sobrexpressos
 ```{r message=FALSE, warning=FALSE}
 entrezUniverse = unlist(mget(featureNames(eset), hugene10sttranscriptclusterENTREZID))
-selectedEntrezIds.up = unlist(mget(rownames(upHipo), hugene10sttranscriptclusterENTREZID))
-params1 = new("GOHyperGParams", geneIds = selectedEntrezIds.up, universeGeneIds = entrezUniverse, 
+selectedEntrezIds.up.h = unlist(mget(rownames(upHipo), hugene10sttranscriptclusterENTREZID))
+params1.up.h = new("GOHyperGParams", geneIds = selectedEntrezIds.up.h, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
-hgOverHipo = hyperGTest(params1)
+hgOverHipo = hyperGTest(params1.up.h)
 summary(hgOverHipo)
 ```
 
-### An·lise de Enriquecimento para os genes subexpressos
+### An√°lise de Enriquecimento para os genes subexpressos
 ```{r message=FALSE, warning=FALSE}
-selectedEntrezIds.down = unlist(mget(rownames(downHipo), hugene10sttranscriptclusterENTREZID))
-params1 = new("GOHyperGParams", geneIds = selectedEntrezIds.down, universeGeneIds = entrezUniverse, 
+selectedEntrezIds.down.h = unlist(mget(rownames(downHipo), hugene10sttranscriptclusterENTREZID))
+params1.down.h = new("GOHyperGParams", geneIds = selectedEntrezIds.down.h, universeGeneIds = entrezUniverse, 
               annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
-hgOver1 = hyperGTest(params1)
+hgOver1 = hyperGTest(params1.down.h)
 summary(hgOver1)[1:10,]
 ```
 
-## DoenÁa de Alzheimer vs n„o-DoenÁa de Alzheimer no CÛrtex Temporal
+## Doen√ßa de Alzheimer vs n√£o-Doen√ßa de Alzheimer no C√≥rtex Temporal
 
 ```{r}
 subsetTemp = eset[,eset$tissue=="temporal cortex"]
@@ -275,6 +279,8 @@ genesATemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & (diffATemp.a
 ssTemp = subsetTemp[rownames(genesATemp),]
 dim(genesATemp)
 ```
+No C√≥rtex Temporal, 8 genes anotados foram considerados diferencialmente expressos entre as duas condi√ß√µes.  
+
 
 ### Genes sobreexpressos:
 ```{r, warning=FALSE}
@@ -282,6 +288,7 @@ upTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$l
 settemp.up = subsetTemp[rownames(upTemp)]
 nomes_upTemp = unlist(mget(rownames(settemp.up),hugene10sttranscriptclusterSYMBOL))
 ```
+No C√≥rtex Temporal, 5 dos 8 genes est√£o sobrexpressos na Doen√ßa de Alzheimer. 
 
 ```{r, warning=FALSE,message=FALSE}
 Vd1_upTemp = nomes_upTemp[subsetTemp$disease.state == "Alzheimer's disease"]
@@ -299,6 +306,7 @@ downTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot
 settemp.down = subsetTemp[rownames(downTemp)]
 nomes_downTemp = unlist(mget(rownames(settemp.down),hugene10sttranscriptclusterSYMBOL))
 ```
+No C√≥rtex Temporal, 3 dos 8 genes est√£o subexpressos na Doen√ßa de Alzheimer. 
 
 ```{r warning=FALSE,message=FALSE}
 Vd1_downTemp = nomes_downTemp[subsetTemp$disease.state == "Alzheimer's disease"]
@@ -308,9 +316,8 @@ colnames(md_downTemp)<- c("AD","non-AD")
 md2_downTemp <- as.table(md_downTemp)
 md2_downTemp
 ```
-####Barplot
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.width=12}
 AD.Temp = ssTemp[,ssTemp$disease.state=="Alzheimer's disease"]
 nAD.Temp = ssTemp[,ssTemp$disease.state=="non-Alzheimer's disease"]
 medAD.Temp=rowMeans(exprs(AD.Temp))
@@ -322,14 +329,32 @@ sdevTemp=c()
 for (i in 1:length(sdevnAD.Temp))
   sdevTemp = c(sdevTemp,sdevAD.Temp[i],sdevnAD.Temp[i])
 nomesTemp = unlist(mget(rownames(dfTemp),hugene10sttranscriptclusterSYMBOL))
-bp.Temp=barplot(t(dfTemp),beside=T,main="Niveis de expressao de 12 genes no Tempcampo",names.arg=nomesTemp, xlab = "nome dos genes", ylab = "NÌvel de express„o mÈdia",col=c("turquoise","mediumvioletred"))
-legend(0,12.2,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
+bp.Temp=barplot(t(dfTemp),beside=T,main="Niveis de expressao de 12 genes no C√≥rtex Temporal",names.arg=nomesTemp, xlab = "nome dos genes", ylab = "N√≠vel de express√£o m√©dia",col=c("turquoise","mediumvioletred"))
+legend(3,10,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Temp,t(dfTemp)+sdevTemp, bp.Temp, t(dfTemp), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
 
-### An·lise de Enriquecimento para os genes sobrexpressos
-### An·lise de Enriquecimento para os genes subexpressos
-## DoenÁa de Alzheimer vs n„o-DoenÁa de Alzheimer no CÛrtex Frontal
+### An√°lise de Enriquecimento para os genes sobrexpressos
+
+```{r message=FALSE, warning=FALSE}
+selectedEntrezIds.up.t = unlist(mget(rownames(upTemp), hugene10sttranscriptclusterENTREZID))
+params1.up.t = new("GOHyperGParams", geneIds = selectedEntrezIds.up.t, universeGeneIds = entrezUniverse, 
+              annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
+hgOverHipo = hyperGTest(params1.up.t)
+summary(hgOverHipo)
+```
+
+### An√°lise de Enriquecimento para os genes subexpressos
+
+```{r message=FALSE, warning=FALSE}
+selectedEntrezIds.down.t = unlist(mget(rownames(downTemp), hugene10sttranscriptclusterENTREZID))
+params1.down.t = new("GOHyperGParams", geneIds = selectedEntrezIds.down.t, universeGeneIds = entrezUniverse, 
+              annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
+hgOver1 = hyperGTest(params1.down.t)
+summary(hgOver1)
+```
+
+## Doen√ßa de Alzheimer vs n√£o-Doen√ßa de Alzheimer no C√≥rtex Frontal
 ```{r}
 subsetFront = eset[,eset$tissue=="frontal cortex"]
 vAFront = pData(subsetFront)
@@ -342,8 +367,9 @@ diffAFront.anot = diffAFront[rownames(anot),]
 genesAFront = diffAFront.anot[which(diffAFront.anot$adj.P.Val < 0.05 & (diffAFront.anot$logFC > treshold | diffAFront.anot$logFC < -treshold)),]
 dim(genesAFront)
 ```
+No C√≥rtex Frontal, n√£o foram identificados genes diferencialmente expressos entre as duas condi√ß√µes. 
 
-## Masculino vs Feminino nos casos de DoenÁa de Alzheimer
+## Masculino vs Feminino nos casos de Doen√ßa de Alzheimer
 ```{r}
 subAD = eset[eset$disease.state=="Alzheimer's disease",]
 rAD = relevel(subAD$gender, "male")
@@ -352,7 +378,10 @@ fit.AD = lmFit(subAD, designAD)
 fit.bayesAD = eBayes(fit.AD) 
 diffAD = topTable(fit.bayesAD, coef = 2, 1000, genelist = fit.AD$genes$NAME)
 diffAD.anot = diffAD[rownames(anot),]
+genesAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & (diffAD.anot$logFC > treshold | diffAD.anot$logFC < -treshold)),]
+dim(genesAD)
 ```
+Na Doen√ßa de Alzheimer, 9 genes est√£o diferencialmente expressos entre o g√©nero masculino e feminino. 
 
 ### Genes sobreexpressos:
 ```{r}
@@ -361,7 +390,10 @@ setAD.up = subAD[rownames(upAD),]
 namesAD.up = unlist(mget(rownames(setAD.up),hugene10sttranscriptclusterSYMBOL))
 namesAD.up
 ```
+Na Doen√ßa de Alzheimer, 7 dos 9 genes est√£o sobrexpressos no g√©nero feminino. 
+
 FALTA A TABELA
+
 ### Genes subexpressos:
 ```{r }
 downAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC < -treshold),]
@@ -369,10 +401,30 @@ setAD.down = subAD[rownames(downAD),]
 namesAD.down = unlist(mget(rownames(setAD.down),hugene10sttranscriptclusterSYMBOL))
 namesAD.down
 ```
-FALTA A TABELA
-### An·lise de Enriquecimento para os genes sobrexpressos
+Na Doen√ßa de Alzheimer, 2 dos 9 genes est√£o subexpressos no g√©nero feminino. 
 
-### An·lise de Enriquecimento para os genes subexpressos
+FALTA A TABELA
+
+### An√°lise de Enriquecimento para os genes sobrexpressos
+
+```{r message=FALSE, warning=FALSE}
+selectedEntrezIds.up.g = unlist(mget(rownames(upAD), hugene10sttranscriptclusterENTREZID))
+params1.up.g = new("GOHyperGParams", geneIds = selectedEntrezIds.up.g, universeGeneIds = entrezUniverse, 
+              annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
+hgOverHipo = hyperGTest(params1.up.g)
+summary(hgOverHipo)
+```
+
+### An√°lise de Enriquecimento para os genes subexpressos
+
+```{r message=FALSE, warning=FALSE}
+selectedEntrezIds.down.g = unlist(mget(rownames(downAD), hugene10sttranscriptclusterENTREZID))
+params1.down.g = new("GOHyperGParams", geneIds = selectedEntrezIds.down.g, universeGeneIds = entrezUniverse, 
+              annotation = "hugene10sttranscriptcluster.db", ontology = "BP", pvalueCutoff = 0.025, testDirection = "over")
+hgOver1 = hyperGTest(params1.down.g)
+summary(hgOver1)
+```
+
 
 # Clustering
 
@@ -390,12 +442,12 @@ dend.Hipo <- as.dendrogram(hc.Hipo)
 colors_to_use <- (as.numeric(subsethipo$disease.state)+2)
 colors_to_use <- colors_to_use[order.dendrogram(dend.Hipo)]
 labels_colors(dend.Hipo) <- colors_to_use
-plot(dend.Hipo, main = "Clustering Hier·rquico non-AD vs AD (hipocampo)")
+plot(dend.Hipo, main = "Clustering Hier√°rquico non-AD vs AD (hipocampo)")
 legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ```  
 
 
-## CÛrtex Temporal
+## C√≥rtex Temporal
 ```{r sTEMP}
 dados.Temp = exprs(ssTemp)
 ```
@@ -408,13 +460,13 @@ dend.Temp <- as.dendrogram(hc.Temp)
 colors_to_use <- (as.numeric(subsetTemp$disease.state)+2)
 colors_to_use <- colors_to_use[order.dendrogram(dend.Temp)]
 labels_colors(dend.Temp) <- colors_to_use
-plot(dend.Temp, main = "Clustering Hier·rquico non-AD vs AD (Cortex Temporal)")
+plot(dend.Temp, main = "Clustering Hier√°rquico non-AD vs AD (Cortex Temporal)")
 legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ```
 
 
 
-## GÈnero 
+## G√©nero 
 
 # Heatmap
 ```{r}
@@ -444,13 +496,13 @@ heatmap(exprs(ssTemp),ColSideColors = tissuecolorst, cexRow = 0.5, distfun = dis
 legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
 ```
 
-# **An·lise preditiva**
+# **An√°lise preditiva**
 
 
-Para realizar a an·lise preditiva do conjunto de dados, optou-se por usar o package Caret, que permite simplificar o processo de criaÁ„o de modelos preditivos, ao facilitar v·rias tarefas como a estimaÁ„o de par‚metros. Foi ent„o realizada a previs„o do estado de doenÁa (Alzheimer, n„o-Alzheimer), do tipo de tecido (Hipocampo, CÛrtex Temporal, CÛrtex Frontal) e do gÈnero (Feminino, Masculino). Os mÈtodos de aprendizagem usados nesta an·lise incluiram K-vizinhos mais prÛximos, ·rvores de decis„o e m·quinas de vetor de suporte (SVMs), sendo que foi escolhido o mÈtodo de validaÁ„o cruzada com 10 folds na seleÁ„o de modelos. Para esta an·lise, foi usado o conjunto de dados filtrado, eset.f. 
+Para realizar a an√°lise preditiva do conjunto de dados, optou-se por usar o package Caret, que permite simplificar o processo de cria√ß√£o de modelos preditivos, ao facilitar v√°rias tarefas como a estima√ß√£o de par√¢metros. Foi ent√£o realizada a previs√£o do estado de doen√ßa (Alzheimer, n√£o-Alzheimer), do tipo de tecido (Hipocampo, C√≥rtex Temporal, C√≥rtex Frontal) e do g√©nero (Feminino, Masculino). Os m√©todos de aprendizagem usados nesta an√°lise incluiram K-vizinhos mais pr√≥ximos, √°rvores de decis√£o e m√°quinas de vetor de suporte (SVMs), sendo que foi escolhido o m√©todo de valida√ß√£o cruzada com 10 folds na sele√ß√£o de modelos. Para esta an√°lise, foi usado o conjunto de dados filtrado, eset.f. 
 
-## Para o estado de doenÁa
-### An·lise dos K vizinhos mais prÛximos
+## Para o estado de doen√ßa
+### An√°lise dos K vizinhos mais pr√≥ximos
 
 
 ```{r knn1,message=FALSE}
@@ -461,10 +513,10 @@ mk1$table; mk1$overal[1]
 ```
 
 
-Como se pode verificar, este modelo previu o estado de doenÁa com uma _Accuracy_ de, aproximadamente, 72.2%, que representa a percentagem de exemplos corretamente classificados pelo modelo. 
+Como se pode verificar, este modelo previu o estado de doen√ßa com uma _Accuracy_ de, aproximadamente, 72.2%, que representa a percentagem de exemplos corretamente classificados pelo modelo. 
 
 
-### ¡rvores de Decis„o
+### √Årvores de Decis√£o
 
 
 ```{r tree1,message=FALSE}
@@ -475,10 +527,10 @@ mt1$table; mt1$overal[1]
 ```
 
 
-Este modelo previu o estado de doenÁa com uma _Accuracy_ de, aproximadamente, 87.3%.
+Este modelo previu o estado de doen√ßa com uma _Accuracy_ de, aproximadamente, 87.3%.
 
 
-### M·quinas de Vetores de Suportes (SVM's)
+### M√°quinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm1,message=FALSE}
@@ -489,11 +541,11 @@ ms1$table; ms1$overal[1]
 ```
 
 
-Este modelo previu o estado de doenÁa com uma _Accuracy_ de 100%, acertando na classificaÁ„o de todos os exemplos. 
+Este modelo previu o estado de doen√ßa com uma _Accuracy_ de 100%, acertando na classifica√ß√£o de todos os exemplos. 
 
 
 ## Para o tipo de tecido
-###  An·lise dos K vizinhos mais prÛximos
+###  An√°lise dos K vizinhos mais pr√≥ximos
 
 
 ```{r knn2,message=FALSE}
@@ -504,9 +556,9 @@ mk2$table; mk2$overal[1]
 ```
 
 
-J· para o tipo de tecido, este modelo previu com uma _Accuracy_ de 91.1%, aproximadamente.
+J√° para o tipo de tecido, este modelo previu com uma _Accuracy_ de 91.1%, aproximadamente.
 
-### ¡rvores de Decis„o
+### √Årvores de Decis√£o
 
 
 ```{r tree2,message=FALSE}
@@ -519,7 +571,7 @@ mt2$table; mt2$overal[1]
 
 Este modelo previu o tipo de tecido com uma _Accuracy_ de 100%.
 
-### M·quinas de Vetores de Suportes (SVM's)
+### M√°quinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm2,message=FALSE}
@@ -530,11 +582,11 @@ ms2$table; ms2$overal[1]
 ```
 
 
-Este modelo tambÈm previu o tipo de tecido com uma _Accuracy_ de 100%. 
+Este modelo tamb√©m previu o tipo de tecido com uma _Accuracy_ de 100%. 
 
 
-## Para o gÈnero
-### An·lise dos K vizinhos mais prÛximos
+## Para o g√©nero
+### An√°lise dos K vizinhos mais pr√≥ximos
 
 
 ```{r knn3,message=FALSE}
@@ -545,9 +597,9 @@ mk3$table; mk3$overal[1]
 ```
 
 
-Na previs„o do gÈnero, este modelo obteve uma _Accuracy_ de 97.5%, aproximadamente. 
+Na previs√£o do g√©nero, este modelo obteve uma _Accuracy_ de 97.5%, aproximadamente. 
 
-### ¡rvores de Decis„o
+### √Årvores de Decis√£o
 
 
 ```{r tree3,message=FALSE}
@@ -558,9 +610,9 @@ mt3$table; mt3$overal[1]
 ```
 
 
-Este modelo previu o gÈnero com uma _Accuracy_ de 100%. 
+Este modelo previu o g√©nero com uma _Accuracy_ de 100%. 
 
-### M·quinas de Vetores de Suportes (SVM's)
+### M√°quinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm3,message=FALSE}
@@ -571,6 +623,6 @@ ms3$table; ms3$overal[1]
 ```
 
 
-Por fim, este modelo tambÈm previu o gÈnero com uma _Accuracy_ de 100%. 
+Por fim, este modelo tamb√©m previu o g√©nero com uma _Accuracy_ de 100%. 
 
 
