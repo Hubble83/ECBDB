@@ -700,6 +700,8 @@ A doença de Alzheimer é considerada uma das doenças do mundo moderno, tendo a su
 
 Consideramos que cumprimos os objetivos propostos e que este trabalho nos enriqueceu em termos de conhecimento sobre as ferramentas do Rstudio, rmarkdown e doença de Alzheimer.
 
+Ainda, verificamos que o hipocampo é o tecido com maior expressão diferencial de genes entre AD e non-AD, corroborando a conclusão do artigo analisado, e que, como esperado, existe diferença na expressão entre sexo feminino e masculino, o que pode explicar a diferente incidência encontrada nos dois sexos.
+
 
 #Bibliografia
 
