@@ -2,7 +2,11 @@
 output_dir: "."
 title: "Altered Expression of Diabetes-Related Genes in Alzheimer's Disease Brains"
 subtitle: " The Hisayama Study"
-authors: "Beatriz Magalhães PG32936 | Cláudio Nóvoa PG32942 | João Afonso A71874 | Marta Sampaio PG32927"
+author:
+- name: "Beatriz Magalhães PG32936"
+- name: "Cláudio Nóvoa PG32942"
+- name: "João Afonso A71874"
+- name: "Marta Sampaio PG32927"
 date: "14 de Junho de 2017"
 output:
   html_document:
