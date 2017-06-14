@@ -420,7 +420,7 @@ male.g = ssAD[,ssAD$gender=="male"]
 female.g = ssAD[,ssAD$gender=="female"]
 medAD.male=rowMeans(exprs(male.g))
 medAD.female = rowMeans(exprs(female.g))
-dfg = data.frame(male=medAD.male,female=medAD.female)
+dfg = data.frame(female=medAD.female,male=medAD.male)
 sdevAD.male = apply(exprs(male.g),1,sd)
 sdevAD.female = apply(exprs(female.g),1,sd)
 sdevg=c()
