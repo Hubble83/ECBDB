@@ -22,11 +22,14 @@ output:
 knitr::opts_chunk$set(cache=TRUE)
 ```
 # Introdução
-Milhões de pessoas em todo o mundo sofrem de demência, sendo que se prevê a quadruplicação deste número nos próximos 25 anos. Tal facto deve-se ao aumento da esperança média de vida e consequente aumento do número de idosos. A doença de Alzheimer (AD) é uma das formas mais comuns de demência nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cérebro, levando à perda de memória, pensamento e distúrbios comportamentais. Atualmente, existe tratamento para a doença, porém apenas retarda a sua evolução. Por não haver ainda uma cura para a AD e porque a prevenção é crucial para a diminuição da taxa de incidência desta doença, é necessário perceber quais os fatores de risco e causas que a provocam. O metabolismo da glucose e a insulina são exemplos desses fatores, onde o organismo em situações de hiperinsulenémia e hiperglicémia, causadas por resistência à insulina, pode acelerar esse processo. Isto deve-se ao aumento da formação de placas neuríticas em conjunto com efeito da APOE &epsilon;4, que se sabe estarem envolvidas na patofisiologia de AD.
+Milhões de pessoas em todo o mundo sofrem de demência, sendo que se prevê a quadruplicação deste número nos próximos 25 anos. Tal facto deve-se ao aumento da esperança média de vida e consequente aumento do número de pessoas idosas. A doença do Alzheimer (AD) é uma das formas mais comuns de demência nos adultos e, sobretudo, nos idosos, que afeta diversas zonas do cérebro levando à perda de memória, pensamento e a distúrbios comportamentais. Atualmente existem tratamentos para a doença, porém apenas retardam a sua evolução. Por não haver ainda uma cura para a AD e porque a prevenção é crucial para a diminuição da taxa de incidência desta doença, é necessário perceber quais os fatores de risco e causas que levam à demência causada pela doença. O metabolismo da glucose e a insulina são exemplos desses fatores, onde o organismo em situações de hiperinsulenemia e hiperglicemia causadas por resistência à insulina pode acelerar esse processo. Isto deve-se ao aumento da formação de placas neuríticas em conjunto com efeito da APOE 
 
-O objetivo deste trabalho passou pela análise de um conjunto de dados de expressão génica, com recurso  ao programa Rstudio e aos packages do Bioconductor.
+**NOTA: COLOCAR \epsilon EPSILON AQUI**
 
-Neste trabalho, foram analisadas 79 amostras, de diferentes tecidos encefálicos, provenientes de necrópsias de indivíduos residentes em Hisayma diagnosticados com aAlzheimer ou um distúrbio relacionado (controlo). Os tipos de tecido analisados correspondem ao hipocampo, córtex temporal ou córtex frontal. 
+4, sendo um fator de risco da AD.
+
+O objetivo deste trabalho é analisar um conjunto de dados de expressão genética usando o programa R e os packages do Bioconductor.
+Neste trabalho foram analisados diferentes tecidos de cérebro de indivíduos pós-morte residentes em Hisayma que tenham sido diagnosticados com a doença do Alzheimer ou um distúrbio relacionado com a AD. O conjunto de dados contém um total de 79 amostras de expressão de genes do organismo Homo Sapiens, variando o tipo de tecido do cérebro, podendo ser pertencente ao hipocampo, córtex temporal ou córtex frontal. Também há outras duas variáveis nos nossos dados, como o sexo, feminino ou masculino e o estado da doença, se têm ou não AD. 
 
 
 # Dados
@@ -73,7 +76,7 @@ legend("topright", legend=c("AD","non-AD"), col = c(72,73), pch=c(19), title="Co
 **Figura 1 -** _Boxplot_ dos dados.
 
 
-Analisando o _Boxplot_, é possível verificar que os dados seguem uma distribuição normal, pois as caixas apresentam uma distribuição simétrica. Para além disso, as mesmas apresentam centros de dados e amplitudes semelhantes.
+Analisando o _Boxplot_, é possível verificar que os dados seguem uma distribuição normal, pois as caixas apresentam uma distribuição simétrica. Para além disso, as mesmas apresentam centros de dados e ampitudes semelhantes.
 
 
 
@@ -87,13 +90,9 @@ names(vars)
 
 
 Os metadados encontram-se organizados em 4 campos, nomeadamente:
-
 * _sample_ -> indica o código da amostra;
-
 * _disease.state_ -> indica a condição do indivíduo do qual a amostra foi recolhida;
-
 * _tissue_ -> indica o tipo de tecido da amostra;
-
 * _gender_ -> indica o sexo do indivíduo do qual a amostra foi recolhida.
 
 
@@ -119,10 +118,10 @@ ftable(vars$tissue, vars$gender, vars$disease.state, dnn = c("Tissue", "Gender",
 
 
 
-# Pré-processamento
+# **Pré-processamento**
 
 
-## Verificação da presença de dados omissos
+## **Verificação da presença de dados omissos**
 
 
 ```{r na}
@@ -131,7 +130,7 @@ sum(is.na(dados))
 Concluí-se que os dados não contêm valores omissos.
 
 
-## Filtração dos dos dados
+## **Filtração dos dos dados
 
 **Retirar dados das sondas que correspondem a genes sem anotação:**
 ```{r subset}
@@ -163,10 +162,10 @@ Procedeu-se, ainda, à filtração dos dados pela mediana, por forma a reduzir a qu
 
 # **Análise de Expressão Diferencial e de Enriquecimento**
 
-Foram realizadas análises de expressão diferencial entre Doença de Alzheimer e controlo (não-Doença de Alzheimer) para os dados referentes a cada tecido (Hipocampo, Córtex Temporal e Córtex Frontal), de forma a detetar qual o mais afetado pela doença e, adicionalmente, foi realizada uma análise de expressão diferencial entre sexo Masculino e sexo Feminino para os dados da Doença de Alzheimer, para confirmar a maior predisposição desta doença no sexo Feminino.
-Estas análises foram realizadas utilizando o package limma, que usa modelos lineares para avaliar a expressão diferencial de experiências multifatoriais, sendo o método ideal para este tipo de análise.  
-Na análise de expressão diferencial usou-se o Expression Set completo, contudo na identificação de genes siginificativamente sobrexpressos e subexpressos analisaram-se apenas os genes anotados, com _p-value_ < 0.05 e _Fold Change_ > _treshold_, para estar de acordo com a análise realizada no artigo. 
-De seguida, foi realizada a análise de enriquecimento onde os genes identificados na análise anterior são comparados com outros conjuntos de genes, onde cada um destes contém genes com funções biológicas semelhantes, com objetivo de verificar se nos genes identificados existe enriquecimento estatisticamente significativo de algum/vários conjuntos. Nesta análise foi usado o package GOstats que permite a análise funcional dos genes de interesse, associando-os a termos de _Gene Ontology_ (GO). 
+Foram realizadas análises de expressão diferencial entre Doença de Alzheimer e controlo (não-Doença de Alzheimer) para os dados referentes a cada tecido (Hipocampo, Córtex Temporal e Córtex Frontal), de forma a detetar qual o tecido mais afetado pela doença e, adicionalmente, foi realizada uma análise de expressão diferencial entre Masculino e Feminino para os dados da Doença de Alzheimer, para confirmar a maior predisposição desta doença no sexo Feminino.
+Estas análises foram realizadas utilizando o package limma que usa modelos lineares para avaliar a expressão diferencial de experiências multifatoriais, sendo o método ideal para este tipo de análises.  
+Na análise de expressão diferencial usou-se o Expression Set completo, contudo na identificação de genes siginificativamente sobrexpressos e subexpressos analisaram-se apenas os genes anotados, com p-value < 0.05 e Fold Change > 1.563, para estar de acordo com a análise realizada no artigo. 
+De seguida, foi realizada a análise de enriquecimento onde os genes identificados na análise anterior são comparados com outros conjuntos de genes, onde cada um destes contém genes com funções biológicas semelhantes, com objetivo de verificar se nos genes identificados existe enriquecimento estatisticamente significativo de algum/vários conjuntos. Nesta análise foi usado o package GOstats que permite a análise funcional dos genes de interesse, associando-os a termos de Gene Ontology (GO). 
 
 ## **Doença de Alzheimer vs Controlo**
 
@@ -191,7 +190,7 @@ dim(genesAHipo)
 No Hipocampo, 83 genes anotados foram considerados diferencialmente expressos entre as duas condições.  
 
 
-#### **Genes sobreexpressos:**
+#### Genes sobreexpressos:
 
 
 ```{r hipoUp}
@@ -199,13 +198,20 @@ upHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & diffAHipo.anot$l
 upHipo
 set.up = subsethipo[rownames(upHipo)]
 nomes_upHipo = unlist(mget(rownames(set.up),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_upHipo)
-nomes_upHipo
 ```
 No hipocampo, 3 dos 83 genes estão sobrexpressos na Doença de Alzheimer. 
 
+```{r warning=FALSE,message=FALSE}
+Vd1_upHipo = nomes_upHipo[subsethipo$disease.state == "Alzheimer's disease"]
+Vd2_upHipo = nomes_upHipo[subsethipo$disease.state != "Alzheimer's disease"]
+md_upHipo <- matrix(c(Vd1_upHipo,Vd2_upHipo),ncol=2,byrow=FALSE)
+colnames(md_upHipo)<- c("AD","non-AD")
+md2_upHipo <- as.table(md_upHipo)
+md2_upHipo
+```
 
-#### **Genes subexpressos:**
+
+#### Genes subexpressos:
 
 
 ```{r hipoDown}
@@ -213,12 +219,17 @@ downHipo = diffAHipo.anot[which(diffAHipo.anot$adj.P.Val < 0.05 & diffAHipo.anot
 downHipo[1:3,]
 set.down = subsethipo[rownames(downHipo)]
 nomes_downHipo = unlist(mget(rownames(set.down),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_downHipo)
-nomes_downHipo[1:15]
 ```
 No hipocampo, 80 dos 83 genes estão subexpressos na Doença de Alzheimer. 
 
-
+```{r warning=FALSE,message=FALSE}
+Vd1_downHipo = nomes_downHipo[subsethipo$disease.state == "Alzheimer's disease"]
+Vd2_downHipo = nomes_downHipo[subsethipo$disease.state != "Alzheimer's disease"]
+md_downHipo <- matrix(c(Vd1_downHipo,Vd2_downHipo),ncol=2,byrow=FALSE)
+colnames(md_downHipo)<- c("AD","non-AD")
+md2_downHipo <- as.table(md_downHipo)
+md2_downHipo[1:10,]
+```
 
 ```{r, message=FALSE, warning=FALSE, fig.width=14}
 ssHipo1 = ssHipo[1:12,]
@@ -237,7 +248,6 @@ bp.Hipo=barplot(t(dfHipo),beside=T,main="Niveis de expressao de 12 genes no hipo
 legend(3,12,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Hipo,t(dfHipo)+sdevHipo, bp.Hipo, t(dfHipo), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
-**Figura 2 -** Comparação dos níveis de expressão de 12 genes cuja expressão diferencial é significativamente diferente no hipocampo AD em relação a non-AD.
 
 
 ### Análise de Enriquecimento para os genes sobrexpressos
@@ -259,7 +269,7 @@ hgOver1 = hyperGTest(params1.down.h)
 summary(hgOver1)[1:10,]
 ```
 
-### **Córtex Temporal**
+## Doença de Alzheimer vs não-Doença de Alzheimer no Córtex Temporal
 
 ```{r}
 subsetTemp = eset[,eset$tissue=="temporal cortex"]
@@ -282,10 +292,17 @@ No Córtex Temporal, 8 genes anotados foram considerados diferencialmente express
 upTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$logFC > treshold),]
 settemp.up = subsetTemp[rownames(upTemp)]
 nomes_upTemp = unlist(mget(rownames(settemp.up),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_upTemp)
-nomes_upTemp
 ```
 No Córtex Temporal, 5 dos 8 genes estão sobrexpressos na Doença de Alzheimer. 
+
+```{r, warning=FALSE,message=FALSE}
+Vd1_upTemp = nomes_upTemp[subsetTemp$disease.state == "Alzheimer's disease"]
+Vd2_upTemp = nomes_upTemp[subsetTemp$disease.state != "Alzheimer's disease"]
+md_upTemp <- matrix(c(Vd1_upTemp,Vd2_upTemp),ncol=2,byrow=FALSE)
+colnames(md_upTemp)<- c("AD","non-AD")
+md2_upTemp <- as.table(md_upTemp)
+md2_upTemp
+```
 
 ### Genes subexpressos:
 
@@ -293,11 +310,17 @@ No Córtex Temporal, 5 dos 8 genes estão sobrexpressos na Doença de Alzheimer.
 downTemp = diffATemp.anot[which(diffATemp.anot$adj.P.Val < 0.05 & diffATemp.anot$logFC < -treshold),]
 settemp.down = subsetTemp[rownames(downTemp)]
 nomes_downTemp = unlist(mget(rownames(settemp.down),hugene10sttranscriptclusterSYMBOL))
-dim(nomes_downTemp)
-nomes_downTemp
 ```
 No Córtex Temporal, 3 dos 8 genes estão subexpressos na Doença de Alzheimer. 
 
+```{r warning=FALSE,message=FALSE}
+Vd1_downTemp = nomes_downTemp[subsetTemp$disease.state == "Alzheimer's disease"]
+Vd2_downTemp = nomes_downTemp[subsetTemp$disease.state != "Alzheimer's disease"]
+md_downTemp <- matrix(c(Vd1_downTemp,Vd2_downTemp),ncol=2,byrow=FALSE)
+colnames(md_downTemp)<- c("AD","non-AD")
+md2_downTemp <- as.table(md_downTemp)
+md2_downTemp
+```
 
 ```{r, message=FALSE, warning=FALSE, fig.width=12}
 AD.Temp = ssTemp[,ssTemp$disease.state=="Alzheimer's disease"]
@@ -315,8 +338,6 @@ bp.Temp=barplot(t(dfTemp),beside=T,main="Niveis de expressao de 12 genes no Córt
 legend(3,10,legend=c("AD","non-AD"),cex=0.6,fill=c("turquoise","mediumvioletred"),xpd=TRUE)
 arrows(bp.Temp,t(dfTemp)+sdevTemp, bp.Temp, t(dfTemp), angle=90, code=1,length = 0.15,xpd=TRUE)
 ```
-**Figura 3 -** Comparação dos níveis de expressão de 12 genes cuja expressão diferencial é significativamente diferente no córtex temporal AD em relação a non-AD.
-
 
 ### Análise de Enriquecimento para os genes sobrexpressos
 
@@ -353,8 +374,7 @@ dim(genesAFront)
 ```
 No Córtex Frontal, não foram identificados genes diferencialmente expressos entre as duas condições. 
 
-## **Masculino vs Feminino nos casos de Doença de Alzheimer**
-
+## Masculino vs Feminino nos casos de Doença de Alzheimer
 ```{r}
 subAD = eset[eset$disease.state=="Alzheimer's disease",]
 rAD = relevel(subAD$gender, "male")
@@ -373,22 +393,22 @@ Na Doença de Alzheimer, 9 genes estão diferencialmente expressos entre o género 
 upAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC > treshold),]
 setAD.up = subAD[rownames(upAD),]
 namesAD.up = unlist(mget(rownames(setAD.up),hugene10sttranscriptclusterSYMBOL))
-dim(namesAD.up)
 namesAD.up
 ```
-7 dos 9 genes estão sobrexpressos no género feminino. 
+Na Doença de Alzheimer, 7 dos 9 genes estão sobrexpressos no género feminino. 
 
+FALTA A TABELA
 
 ### Genes subexpressos:
 ```{r }
 downAD = diffAD.anot[which(diffAD.anot$adj.P.Val < 0.05 & diffAD.anot$logFC < -treshold),]
 setAD.down = subAD[rownames(downAD),]
 namesAD.down = unlist(mget(rownames(setAD.down),hugene10sttranscriptclusterSYMBOL))
-dim(namesAD.down)
 namesAD.down
 ```
-2 dos 9 genes estão subexpressos no género feminino. 
+Na Doença de Alzheimer, 2 dos 9 genes estão subexpressos no género feminino. 
 
+FALTA A TABELA
 
 ### Análise de Enriquecimento para os genes sobrexpressos
 
@@ -411,34 +431,14 @@ summary(hgOver1)
 ```
 
 
-# **Clustering**
+# Clustering
 
-Foi realizada uma análise de clustering hierárquico, utilizando todos os dados do expression set, apenas para amostras provenientes do hipocampo e do córtex temporal, uma vez que verificamos na análise de expressão diferencial que não se encontram diferenças significativas de expressão para os genes do córtex frontal entre AD e non-AD. Pelo cluster é possível perceber se existe um agrupamento de amostras de acordo com os valores de expressão, separando, portanto, as amostras provenientes das duas condições.
-A mariz de distância utilizada foi a correlação de Pearson, indicada quando se verifica um padrão nos dados, e o método de _clustering_ o _complete_.
-
-Para além disso, foi feita uma outra análise de clustering, agrupando tanto as amostras como as sondas, ou seja, aplicando o _clustering_ às colunas e às linhas. Este _clustering_ é apresentado na forma de um _heatmap_, onde os valores de uma matriz são representado como cores.
-
-Para a construção do _heatmap_ foram necessárias as seguintes funções:
-```{r}
-dist.fun = function(x) {
-  return (as.dist (1 - cor(t (x), method = "pearson")))
-}
-
-clust.fun = function (x) {
-  return (hclust (x))
-}
-color.map.tissue <- function(disease) { if (disease == "Alzheimer's disease") "turquoise" else "chocolate1" }
-```
-
-
-## **Hipocampo**
+## Hipocampo
 ```{r shipo}
-genesH.todos = diffAHipo[which(diffAHipo$adj.P.Val < 0.05),]
-Hipo.todos = subsethipo[rownames(genesH.todos),]
-dados.Hipo = exprs(Hipo.todos)
+ssHipo = subsethipo[rownames(genesAHipo),]
+dados.Hipo = exprs(ssHipo)
 ```
 
-**_cluster_:**
 ```{r chipo,message=FALSE}
 cHipo=cor(dados.Hipo, method = "pearson")
 dHipo = as.dist(1-cHipo)
@@ -450,31 +450,13 @@ labels_colors(dend.Hipo) <- colors_to_use
 plot(dend.Hipo, main = "Clustering Hierárquico non-AD vs AD (hipocampo)")
 legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ```  
-**Figura 4 -** _Clustering_ das amostras referentes aos genes diferencialmente expressos no hipocampo. 
-
-Pelo _clustering_ verifica-se que é possível separar as amostras provenientes de indivíduos com AD das amostras de controlo no hipocampo em dois _clusters_. Desta forma, conclui-se que os genes correspondentes a amostras de indivíduos com AD apresentam um nível de expressão mais próximo entre si e mais afastado dos genes que provêm de amostras de controlo. Esta divisão era esperado, pois está concordante com os resultados da análise de expressão diferencial.
-
-# **_Heatmap_:**
-```{r}
-tissuecolorsh <- unlist(lapply(ssHipo$disease.state, color.map.tissue))
-heatmap(exprs(ssHipo),ColSideColors = tissuecolorsh, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
-        ylab = "Sondas", xlab = "Amostras", main = "Heatmap (Hipocampo)")
-legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
-```
-**Figura 5 -** _Heatmap_ dos dados de expressão do hipocampo.
-
-Analisando o _heatmap_, verifica-se uma evidente separação das amostras, tal como no _cluster_ anterior. Para além disso, observa-se vários agrupamentos dos genes, que parecem estar agrupados consoante os seus níveis de expressão já que se percebe uma diminuição da intensidade da côr do topo para a base do _heatmap_ na porção correspondente às amostras AD, apesar de esta distinção não ser tão clara como aquela das amostras.
 
 
-## **Córtex Temporal**
+## Córtex Temporal
 ```{r sTEMP}
-genesT.todos = diffATemp[which(diffATemp$adj.P.Val < 0.05),]
-Temp.todos = subsethipo[rownames(genesT.todos),]
-dados.Temp = exprs(Temp.todos)
+dados.Temp = exprs(ssTemp)
 ```
 
-
-**_Cluster_:**
 ```{r, message=FALSE, warning=FALSE}
 cTemp=cor(dados.Temp, method = "pearson")
 dTemp = as.dist(1-cTemp)
@@ -486,11 +468,31 @@ labels_colors(dend.Temp) <- colors_to_use
 plot(dend.Temp, main = "Clustering Hierárquico non-AD vs AD (Cortex Temporal)")
 legend('topright', c("non-AD","AD"), bty = "n", fill = c(4, 3))
 ```
-**Figura 6 -** _Clustering_ das amostras referentes aos genes diferencialmente expressos no córtex temporal. 
 
-Pelo _clustering_ verifica-se que não é possível separar completamente as amostras provenientes de indivíduos com AD das amostras de controlo no córtex temporal em dois _clusters_. Desta forma, conclui-se que apenas alguns genes correspondentes a amostras de indivíduos com AD apresentam um nível de expressão mais próximo entre si e mais afastado dos genes que provêm de amostras de controlo. Isto indica que nem todos os genes têm uma expressão diferencial significativa neste tecido, sendo portanto, menos afetado que o hipocampo.
 
-**_Heatmap_:**
+
+## Género 
+
+# Heatmap
+```{r}
+dist.fun = function(x) {
+  return (as.dist (1 - cor(t (x), method = "pearson")))
+}
+
+clust.fun = function (x) {
+  return (hclust (x))
+}
+color.map.tissue <- function(disease) { if (disease == "Alzheimer's disease") "turquoise" else "chocolate1" }
+```
+#### HIPOCAMPO
+```{r}
+tissuecolorsh <- unlist(lapply(ssHipo$disease.state, color.map.tissue))
+heatmap(exprs(ssHipo),ColSideColors = tissuecolorsh, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
+        ylab = "Sondas", xlab = "Amostras", main = "Heatmap (Hipocampo)")
+legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
+```
+
+#### TEMPORAL
 ```{r}
 tissuecolorst <- unlist(lapply(ssTemp$disease.state, color.map.tissue))
 heatmap(exprs(ssTemp),ColSideColors = tissuecolorst, cexRow = 0.5, distfun = dist.fun, hclustfun = clust.fun, labRow = F, margins = c(7,7), 
@@ -498,17 +500,14 @@ heatmap(exprs(ssTemp),ColSideColors = tissuecolorst, cexRow = 0.5, distfun = dis
 
 legend("topright",legend=c("AD","non-AD"), bty="n",fill = c("turquoise","chocolate1"))
 ```
-**Figura 7 -** _Heatmap_ dos dados de expressão do córtex temporal.
-
-Analisando o _heatmap_, verifica-se que as amostras não são totalmente separadas, tal como no _cluster_ anterior. (Falta aqui o resto da interpretação, tenho de ver o heatmap antes de escrever)
 
 # **Análise preditiva**
 
 
-Para realizar a análise preditiva do conjunto de dados, optou-se por usar o package Caret, que permite simplificar o processo de criação de modelos preditivos, ao facilitar várias tarefas como a estimação de parâmetros. Foi então realizada a previsão do estado de doença (Alzheimer, não-Alzheimer), do tipo de tecido (Hipocampo, Córtex Temporal, Córtex Frontal) e do género (Feminino, Masculino). Os métodos de aprendizagem usados nesta análise incluem o método dos K-vizinhos mais próximos, árvores de decisão e máquinas de vetor de suporte (SVMs), sendo que foi escolhido o método de validação cruzada com 10 _folds_ na seleção de modelos. Para esta análise, foi utilizado o conjunto de dados filtrado (eset.f). 
+Para realizar a análise preditiva do conjunto de dados, optou-se por usar o package Caret, que permite simplificar o processo de criação de modelos preditivos, ao facilitar várias tarefas como a estimação de parâmetros. Foi então realizada a previsão do estado de doença (Alzheimer, não-Alzheimer), do tipo de tecido (Hipocampo, Córtex Temporal, Córtex Frontal) e do género (Feminino, Masculino). Os métodos de aprendizagem usados nesta análise incluiram K-vizinhos mais próximos, árvores de decisão e máquinas de vetor de suporte (SVMs), sendo que foi escolhido o método de validação cruzada com 10 folds na seleção de modelos. Para esta análise, foi usado o conjunto de dados filtrado, eset.f. 
 
-## **Para o estado de doença**
-### **Análise dos K vizinhos mais próximos**
+## Para o estado de doença
+### Análise dos K vizinhos mais próximos
 
 
 ```{r knn1,message=FALSE}
@@ -522,7 +521,7 @@ mk1$table; mk1$overal[1]
 Como se pode verificar, este modelo previu o estado de doença com uma _Accuracy_ de, aproximadamente, 72.2%, que representa a percentagem de exemplos corretamente classificados pelo modelo. 
 
 
-### **Árvores de Decisão**
+### Árvores de Decisão
 
 
 ```{r tree1,message=FALSE}
@@ -536,7 +535,7 @@ mt1$table; mt1$overal[1]
 Este modelo previu o estado de doença com uma _Accuracy_ de, aproximadamente, 87.3%.
 
 
-### **Máquinas de Vetores de Suportes (SVM's)**
+### Máquinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm1,message=FALSE}
@@ -550,8 +549,8 @@ ms1$table; ms1$overal[1]
 Este modelo previu o estado de doença com uma _Accuracy_ de 100%, acertando na classificação de todos os exemplos. 
 
 
-## **Para o tipo de tecido**
-###  **Método dos K vizinhos mais próximos**
+## Para o tipo de tecido
+###  Análise dos K vizinhos mais próximos
 
 
 ```{r knn2,message=FALSE}
@@ -564,7 +563,7 @@ mk2$table; mk2$overal[1]
 
 Já para o tipo de tecido, este modelo previu com uma _Accuracy_ de 91.1%, aproximadamente.
 
-### **Árvores de Decisão**
+### Árvores de Decisão
 
 
 ```{r tree2,message=FALSE}
@@ -577,7 +576,7 @@ mt2$table; mt2$overal[1]
 
 Este modelo previu o tipo de tecido com uma _Accuracy_ de 100%.
 
-### **Máquinas de Vetores de Suportes (SVM's)**
+### Máquinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm2,message=FALSE}
@@ -591,8 +590,8 @@ ms2$table; ms2$overal[1]
 Este modelo também previu o tipo de tecido com uma _Accuracy_ de 100%. 
 
 
-## **Para o género**
-### **Método dos K vizinhos mais próximos**
+## Para o género
+### Análise dos K vizinhos mais próximos
 
 
 ```{r knn3,message=FALSE}
@@ -605,7 +604,7 @@ mk3$table; mk3$overal[1]
 
 Na previsão do género, este modelo obteve uma _Accuracy_ de 97.5%, aproximadamente. 
 
-### **Árvores de Decisão**
+### Árvores de Decisão
 
 
 ```{r tree3,message=FALSE}
@@ -618,7 +617,7 @@ mt3$table; mt3$overal[1]
 
 Este modelo previu o género com uma _Accuracy_ de 100%. 
 
-### **Máquinas de Vetores de Suportes (SVM's)**
+### Máquinas de Vetores de Suportes (SVM's)
 
 
 ```{r svm3,message=FALSE}
